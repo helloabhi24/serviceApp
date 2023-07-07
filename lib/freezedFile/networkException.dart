@@ -6,6 +6,7 @@ part 'freezed_files/network_exceptions.freezed.dart';
 
 @freezed
 abstract class NetworkExceptions with _$NetworkExceptions {
+
   const factory NetworkExceptions.requestCancelled() = RequestCancelled;
 
   const factory NetworkExceptions.unauthorisedRequest() = UnauthorisedRequest;
@@ -46,6 +47,9 @@ abstract class NetworkExceptions with _$NetworkExceptions {
         NetworkExceptions? networkExceptions;
         if (error is DioError) {
           switch (error.type) {
+            case DioErrorType.badCertificate:
+              networkExceptions = const NetworkExceptions.badRequest();
+              break;
             case DioErrorType.cancel:
               networkExceptions = const NetworkExceptions.requestCancelled();
               break;
@@ -59,7 +63,12 @@ abstract class NetworkExceptions with _$NetworkExceptions {
             case DioErrorType.receiveTimeout:
               networkExceptions = const NetworkExceptions.sendTimeout();
               break;
-            case DioErrorType.sendTimeout:
+
+               case DioErrorType.connectionError:
+              networkExceptions = const NetworkExceptions.unexpectedError();
+              break;
+              
+            case DioErrorType.badResponse:
               switch (error.response!.statusCode) {
                 case 400:
                   networkExceptions =
@@ -83,7 +92,7 @@ abstract class NetworkExceptions with _$NetworkExceptions {
                 case 408:
                   networkExceptions = const NetworkExceptions.requestTimeout();
                   break;
-                case 500:
+                case 500 :
                   networkExceptions =
                       const NetworkExceptions.internalServerError();
                   break;
@@ -101,7 +110,7 @@ abstract class NetworkExceptions with _$NetworkExceptions {
 
             case DioErrorType.sendTimeout:
               networkExceptions = const NetworkExceptions.sendTimeout();
-              break;
+            break;
           }
         } else if (error is SocketException) {
           networkExceptions = const NetworkExceptions.noInternetConnection();

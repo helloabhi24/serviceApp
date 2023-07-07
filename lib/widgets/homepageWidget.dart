@@ -2,14 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:service/controllers.dart/homepageController.dart';
+import 'package:service/controllers.dart/singinppagecontroller.dart';
+import 'package:service/localStorage/localStorage.dart';
+import 'package:service/utils/constant.dart';
+import 'package:service/utils/customText.dart';
 import 'package:service/utils/textExtension.dart';
 import '../constant/constant.dart';
 import '../constant/sizeHelper.dart';
 import '../utils/customAssetsImage.dart';
+import '../view/chatPage.dart';
 
-HomepageController homepageController = Get.find();
+//  HomepageController homepageController = Get.find();
+// LocalStorageController localStorageController = Get.find();
 
 class HomePageWidget {
+  HomepageController homepageController = Get.find();
   static customeAppbar(context) {
     return AppBar(
         backgroundColor: KColors.persistentBlack,
@@ -18,7 +25,7 @@ class HomePageWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CustomAssetsImage(
-              imagePath: "assets/images/HX.png",
+              imagePath: Constant().logo,
               height: Get.height * 0.06,
             ),
             getWidth(context, 0.010),
@@ -28,52 +35,30 @@ class HomePageWidget {
         actions: [
           Row(
             children: [
-              Stack(
-                alignment: Alignment.topRight,
-                children: [
-                  GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () async {
-                        homepageController.getDealerList();
-                      },
-                      child: const Icon(Icons.notifications)),
-                  const CircleAvatar(radius: 5, backgroundColor: KColors.red)
-                ],
-              ),
-              getWidth(context, 0.030),
-              Padding(
-                padding: EdgeInsets.only(right: getHorizontalSize(10)),
-                child: GestureDetector(
-                  onTap: () {},
-                  child: const CircleAvatar(
-                      radius: 15,
-                      backgroundColor: KColors.white,
-                      child: CircleAvatar(
-                        backgroundColor: KColors.white,
-                        radius: 15,
-                        child: ClipOval(
-                            child: Icon(
-                          Icons.person,
-                          color: KColors.persistentBlack,
-                        )
-                            // CachedNetworkImage(
-                            //   height: Get.height * 0.20,
-                            //   fit: BoxFit.cover,
-                            //   imageUrl: "",
-                            //   width: Get.width * 0.25,
-                            //   // placeholder: (context, url) => const Center(
-                            //   //     child: RepaintBoundary(
-                            //   //   child: CircularProgressIndicator(
-                            //   //     strokeWidth: 2,
-                            //   //   ),
-                            //   // )),
-                            //   errorWidget: (context, url, error) =>
-                            //       const Icon(Icons.error),
-                            // ),
-                            ),
-                      )),
-                ),
-              ),
+              GestureDetector(onTap: (){
+                Get.to(const ChatsWithPerson());
+              },
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: const Icon(Icons.chat, size: 20,),
+                )),
+              // Padding(
+              //   padding: const EdgeInsets.all(12.0),
+              //   child: Stack(
+              //     alignment: Alignment.topRight,
+              //     children: [
+              //       GestureDetector(
+              //           behavior: HitTestBehavior.translucent,
+              //           onTap: () async {
+              //             // Get.to(const ChatsWithPerson());
+              //             // homepageController.serviceReport();
+              //           },
+              //           child: const Icon(Icons.notifications)),
+              //       const CircleAvatar(radius: 5, backgroundColor: KColors.red)
+              //     ],
+              //   ),
+              // ),
+              
             ],
           )
         ]);
@@ -82,92 +67,111 @@ class HomePageWidget {
 
 class UserDetail extends GetView<HomepageController> {
   const UserDetail({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: Get.height * 0.11,
-      width: Get.width,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10), color: KColors.orange),
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: getHorizontalSize(14)),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
+    LocalStorageController localStorageController =  Get.find();
+    return Obx(()=>
+     GestureDetector(onTap: (){
+        controller.determinePosition();
+      },
+        child: Container(
+          height: Get.height * 0.11,
+          width: Get.width,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10), color: KColors.orange),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: getHorizontalSize(14)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const CircleAvatar(
-                  backgroundColor: KColors.white,
-                  child: Icon(
-                    Icons.person,
-                    color: KColors.persistentBlack,
-                  ),
+                Row(
+                  children: [   
+                    localStorageController.userImage.value.isEmpty? CircleAvatar(child: Icon(Icons.person),):
+                    Container(decoration: BoxDecoration(shape: BoxShape.circle , image: DecorationImage(fit: BoxFit.cover,
+                      image: NetworkImage("https://admin.switchxenergy.com/uploads/user_service/${localStorageController.userImage.value}"))),
+                      height: 40,width: 40,) ,                                
+                    //  CircleAvatar(
+                    //   backgroundColor: KColors.white,
+                    //   child: 
+                    //    Image.network("https://admin.switchxenergy.com/uploads/user_service/${localStorageController.userImage.value}")
+                    // ),
+                    width13,
+                    localStorageController.userName.value.isEmpty?const AppText(text: "no Name",):
+                   localStorageController.userName.value.f18w6(fontSize: 19.sp),
+                  ],
                 ),
-                width13,
-                "Sanjay Jha".f18w6(fontSize: 19.sp),
+                "SE012\nNorth-zone"
+                    .f16w6(textAlign: TextAlign.center, fontSize: 17.sp)
               ],
             ),
-            "SE012\nNorth-zone"
-                .f16w6(textAlign: TextAlign.center, fontSize: 17.sp)
-          ],
+          ),
         ),
       ),
     );
   }
 }
 
-class UserActivationPage extends StatelessWidget {
+class UserActivationPage extends GetView<HomepageController>{
   const UserActivationPage({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: getHorizontalSize(10)),
-      height: Get.height * 0.10,
-      width: Get.width,
-      decoration: BoxDecoration(boxShadow: const [
-        BoxShadow(
-          color: Colors.grey,
-          blurRadius: 5.0,
-        ),
-      ], borderRadius: BorderRadius.circular(10), color: KColors.white),
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 6.h,
-            backgroundColor: KColors.grey,
+    
+    return Obx(()=>
+     Container(
+        padding: EdgeInsets.symmetric(horizontal: getHorizontalSize(10)),
+        height: Get.height * 0.10,
+        width: Get.width,
+        decoration: BoxDecoration(boxShadow:  [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            blurRadius: 2.0,
           ),
-          width13,
-          "Offline".f18w6(textColor: KColors.persistentBlack, fontSize: 19),
-          Row(
-            children: [
-              Switch(
-                  activeColor: KColors.green,
-                  value: true,
-                  onChanged: (v) async {
-                    // transactionpageController.totalAmount(200);
-                    // homepageController.isToggle.value = v;
-                    // await homepageController.userStatus();
-                    // await homepageController.isOfflineOnlineUser();
-                  }),
-            ],
-          ),
-          const Spacer(),
-          "Attendance".f18w6(textColor: KColors.persistentBlack),
-          width5,
-          GestureDetector(
-            onTap: () => showDatePicker(
-                context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(2015, 8),
-                lastDate: DateTime(30000)),
-            child: const Icon(
-              Icons.arrow_forward_ios,
-              size: 20,
+        ], borderRadius: BorderRadius.circular(10), color: KColors.white),
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 6.h,
+              backgroundColor: controller.isUpdated.value==true?KColors.green: KColors.grey,
             ),
-          )
-        ],
+            width13,
+            controller.isUpdated.value ==true?"Online".f18w6(textColor: KColors.persistentBlack, fontSize: 19): "Offline".f18w6(textColor: KColors.persistentBlack, fontSize: 19),
+            Row(
+              children: [
+                Switch(
+                    activeColor: KColors.green,
+                    value: controller.isUpdated.value,
+                    // homepageController.isStatus.value,
+                    onChanged: (v) async {
+                          controller.isStatus.value =  v; 
+                          // homepageController.statusOnline(homepageController.isStatus.value ==true?"1":"0" );
+                    }),
+              ],
+            ),
+            const Spacer(),
+            GestureDetector(onTap: ()async{
+              final DateTime? picked=  await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2015),
+                    lastDate: DateTime(2029));
+                   if(picked !=null){
+                    controller.selectedDate.value =  picked.toString().split("00:00:00.000")
+              .first; 
+                   await controller.attendence();
+                   }
+            },
+              child: Row(children: [
+                      "Attendance".f18w6(textColor: KColors.persistentBlack),
+              width5,
+              const Icon(
+                Icons.arrow_forward_ios,
+                size: 20,
+              )
+              ],),
+            )
+            
+          ],
+        ),
       ),
     );
   }

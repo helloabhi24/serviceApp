@@ -1,29 +1,31 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:service/constant/constant.dart';
-import 'package:service/controllers.dart/homepageController.dart';
-import 'package:service/routes.dart/appRoutes.dart';
+import 'package:service/controllers.dart/singinppagecontroller.dart';
+import 'package:service/utils/constant.dart';
+import 'package:service/utils/customToast.dart';
 import '../constant/sizeHelper.dart';
 import '../utils/customElevatedButton.dart';
 import '../utils/customFormFields.dart';
 import '../utils/customText.dart';
 import '../utils/validation.dart';
 
-class SignInPage extends GetView<HomepageController> with Validation {
+class SignInPage extends GetView<SinginpageController> with Validation {
   const SignInPage({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SingleChildScrollView(
+        body: SingleChildScrollView(  
       physics: const BouncingScrollPhysics(),
       child: Stack(children: [
         Container(
           height: Get.height,
           width: Get.width,
-          decoration: const BoxDecoration(
+          decoration:  BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage("assets/images/splashScreen.jpg"),
+                  image: AssetImage(Constant().splashScreen2),
                   fit: BoxFit.cover)),
           child: null,
         ),
@@ -74,6 +76,7 @@ class SignInPage extends GetView<HomepageController> with Validation {
                                         ),
                                         getheight(context, 0.02),
                                         CustomFormField(
+                                          inputType: TextInputType.emailAddress,
                                           icons: Icons.email,
                                           contentPadding: EdgeInsets.symmetric(
                                               horizontal: getHorizontalSize(10),
@@ -90,7 +93,8 @@ class SignInPage extends GetView<HomepageController> with Validation {
                                           fontWeight: FontWeight.w600,
                                         ),
                                         getheight(context, 0.02),
-                                        CustomFormField(
+                                        CustomFormField(inputType: TextInputType.text,
+
                                           icons: Icons.lock,
                                           contentPadding: EdgeInsets.symmetric(
                                               horizontal: getHorizontalSize(10),
@@ -123,32 +127,14 @@ class SignInPage extends GetView<HomepageController> with Validation {
                                         text: "SignIn",
                                       ),
                                       textButton: "SignIn",
-                                      ontap: () {
-                                        Get.toNamed(Routes.HOME);
-                                        // if (controller
-                                        //     .signinformKey.currentState!
-                                        //     .validate()) {
-                                        //   controller
-                                        //       .signInUser()
-                                        //       .whenComplete(() {
-                                        //     if (controller.status.value ==
-                                        //         1) {
-                                        //       customeToast(
-                                        //           controller.message.value);
-
-                                        //       Get.offNamed("/mainpage");
-                                        //       Get.delete<
-                                        //           SignInPageController>();
-                                        //       // Get.to(const MainPage());
-                                        //     } else if (controller
-                                        //             .status.value ==
-                                        //         0) {
-                                        //       customeToast(
-                                        //           controller.message.value);
-                                        //     }
-                                        //     {}
-                                        //   });
-                                        // }
+                                      ontap: () async{
+                                        if(controller.signinformKey.currentState!.validate()){
+                                           await  controller.signin();
+                                           
+                                        }else{
+                                          customeToast("all fileds are required");
+                                        }
+                                      
                                       }),
                                 ),
                               ),

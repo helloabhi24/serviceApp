@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:service/constant/constant.dart';
+import 'package:service/utils/constant.dart';
 import 'package:service/utils/textExtension.dart';
 import '../constant/sizeHelper.dart';
 import '../controllers.dart/batteryDetailPageController.dart';
@@ -14,12 +15,6 @@ class BatteryDetailPage extends GetView<BatteryDetailpageController> {
   const BatteryDetailPage({super.key});
   @override
   Widget build(BuildContext context) {
-    // late GoogleMapController mapController;
-    // controller.soc2.value = controller.soc.value * 0.7;
-
-    print("socjjjjjj");
-    print(controller.soc.value);
-    // Get.arguments["batteryId"];
     return Obx(
       () => Scaffold(
         appBar: AppBar(
@@ -63,11 +58,7 @@ class BatteryDetailPage extends GetView<BatteryDetailpageController> {
                   ),
                   getWidth(context, 0.050),
                   const CustomBatteryIndicator()
-                  // const Icon(
-                  //   Icons.battery_charging_full,
-                  //   color: AppColor.greenColor,
-                  //   size: 100,
-                  // )
+                
                 ],
               ),
               getheight(context, 0.010),
@@ -126,7 +117,7 @@ class BatteryDetailPage extends GetView<BatteryDetailpageController> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     tempWidget(
-                        "assets/images/batcycle.png",
+                        Constant().batteryCycle,
                         "${controller.cycle.value} cycle",
                         "Battery Cycles",
                         35.h,
@@ -156,7 +147,7 @@ class BatteryDetailPage extends GetView<BatteryDetailpageController> {
                             radius: 200,
                             strokeWidth: 2,
                             strokeColor: KColors.blue.withOpacity(0.2),
-                            fillColor: KColors.blue..withOpacity(0.3)),
+                            fillColor: KColors.blue.withOpacity(0.3)),
                       },
                       // onMapCreated: (controlle) {
                       //   mapController = controlle;

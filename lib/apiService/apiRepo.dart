@@ -27,11 +27,11 @@ class ApiRepo {
         NetworkExceptions.getDioException(e));
   }
 
-  Future getDealerList() async {
+  Future getDealerList(String id) async {
     try {
       var response = await _api.request
           .get(
-            ServiceConstant.GETDEALERLIST,
+            "https://admin.switchxenergy.com/api/get_user_with_battery?serviceUser_id=${id}",
             options: options,
           )
           .timeout(const Duration(seconds: 15));
@@ -101,38 +101,262 @@ class ApiRepo {
       }
       errorSnackbar(getError(e));
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
-      // DioExceptions.fromDioError(e);
-      // print("no internet connection");
-      // // customSnakebar("Something Went Wrong");
-      // // customSnakebar(e.toString());
+ 
     }
   }
 
-  // Future dischargingOfBatteries(String batteryId, bool isDischarge) async {
-  //   print(batteryId);
-  //   print(isDischarge);
-  //   try {
-  //     var response = await _api.request
-  //         .post("http://battrack.electrifuel.com/batterypowercontrol/",
-  //             options: Options(headers: {
-  //               "X-Api-Key": "c7PgheG9.t1xlXJjrKeRI1P1Aq8mwTWHMYBE8EGt9",
-  //               "Content-Type": "application/json"
-  //             }),
-  //             data: {"Bid": batteryId, "charging": isDischarge});
 
-  //     if (response.statusCode == 200) {
-  //       if (isDischarge == true) {
-  //         batteryDetailpageController.status.value = "Battery is On";
-  //       } else {
-  //         batteryDetailpageController.status.value = "Battery is Off";
-  //       }
-  //     } else {
-  //       batteryDetailpageController.status.value = "Something Went Worng";
-  //     }
+    Future signInApi(Map<String, dynamic> data) async {
+    try {
+      var response = await _api.request
+          .post(ServiceConstant.SIGNIN, options: options, data: data)
+          .timeout(const Duration(seconds: 15));
+      if (response.statusCode == 200) {
+        var responseBody = jsonDecode(response.data);
+        return responseBody;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      errorSnackbar(getError(e));
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    
+    }
+  }
+  
 
-  //     return response.data;
-  //   } catch (e) {
-  //     batteryDetailpageController.status.value = "Something Went Worng";
-  //   }
-  // }
+  Future serviceReport(Map<String, dynamic> data) async {
+    try {
+      var response = await _api.request
+          .post(ServiceConstant.SERVICEREPORT, options: options, data: data)
+          .timeout(const Duration(seconds: 15));
+      if (response.statusCode == 200) {
+        var responseBody = jsonDecode(response.data);
+        return responseBody;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      errorSnackbar(getError(e));
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    
+    }
+  }
+
+
+
+   Future serviceUpdate(Map<String, dynamic> data) async {
+    try {
+      var response = await _api.request
+          .post(ServiceConstant.SERVICEUPDATE, options: options, data: data)
+          .timeout(const Duration(seconds: 15));
+      if (response.statusCode == 200) {
+        var responseBody = jsonDecode(response.data);
+        return responseBody;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      errorSnackbar(getError(e));
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));   
+    }
+  }
+
+
+
+   Future referDriver(Map<String, dynamic> data) async {
+    try {
+      var response = await _api.request
+          .post(ServiceConstant.REFERDRIVER, options: options, data: data)
+          .timeout(const Duration(seconds: 15));
+      if (response.statusCode == 200) {
+        var responseBody = jsonDecode(response.data);
+        return responseBody;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      errorSnackbar(getError(e));
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    
+    }
+  }
+
+
+Future status(Map<String, dynamic> data) async {
+    try {
+      var response = await _api.request
+          .post(ServiceConstant.STATUS, options: options, data: data)
+          .timeout(const Duration(seconds: 15));
+      if (response.statusCode == 200) {
+        var responseBody = jsonDecode(response.data);
+        return responseBody;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      errorSnackbar(getError(e));
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    
+    }
+  }
+
+
+
+
+  Future attendenceMark(Map<String, dynamic> data) async {
+    try {
+      var response = await _api.request
+          .post(ServiceConstant.ATTENDENCEMARK, options: options, data: data)
+          .timeout(const Duration(seconds: 15));
+      if (response.statusCode == 200) {
+        var responseBody = jsonDecode(response.data);
+        return responseBody;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      errorSnackbar(getError(e));
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    
+    }
+  }
+
+
+
+  Future batteryChargerProblem(Map<String, dynamic> data) async {
+    try {
+      var response = await _api.request
+          .post(ServiceConstant.BATTERYCHAGERPROBLEM, options: options, data: data)
+          .timeout(const Duration(seconds: 15));
+      if (response.statusCode == 200) {
+        var responseBody = jsonDecode(response.data);
+        return responseBody;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      errorSnackbar(getError(e));
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    
+    }
+  }
+
+
+  Future getServiceUserList(String id) async {
+    try {
+      var response = await _api.request
+          .get("https://admin.switchxenergy.com/api/get_userlist?serviceUser_id=${id}", options: options,)
+          .timeout(const Duration(seconds: 15));
+      if (response.statusCode == 200) {
+        var responseBody = jsonDecode(response.data);
+        return responseBody;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      errorSnackbar(getError(e));
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    
+    }
+  }
+
+
+
+  Future dealerList(Map<String, dynamic> data) async {
+    try {
+      var response = await _api.request
+          .post(ServiceConstant.DEALERLIST, options: options, data: data)
+          .timeout(const Duration(seconds: 15));
+      if (response.statusCode == 200) {
+        var responseBody = jsonDecode(response.data);
+        return responseBody;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      errorSnackbar(getError(e));
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    
+    }
+  }
+
+
+
+
+   Future driverConnect(Map<String, dynamic> data) async {
+    try {
+      var response = await _api.request
+          .post(ServiceConstant.GETDRIVERCONNECT, options: options, data: data)
+          .timeout(const Duration(seconds: 15));
+      if (response.statusCode == 200) {
+        var responseBody = jsonDecode(response.data);
+        return responseBody;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      errorSnackbar(getError(e));
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    
+    }
+  }
+
+
+
+  Future getDriverdetail(Map<String, dynamic> data) async {
+    try {
+      var response = await _api.request
+          .post(ServiceConstant.GETDRIVERDETAILS, options: options, data: data)
+          .timeout(const Duration(seconds: 15));
+      if (response.statusCode == 200) {
+        var responseBody = jsonDecode(response.data);
+        return responseBody;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      errorSnackbar(getError(e));
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    
+    }
+  }
+
+
+
+
+
 }

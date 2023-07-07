@@ -4,80 +4,66 @@
 
 import 'dart:convert';
 
-DealerModel dealerModelFromJson(String str) =>
-    DealerModel.fromJson(json.decode(str));
+DealerModel dealerModelFromJson(String str) => DealerModel.fromJson(json.decode(str));
 
 String dealerModelToJson(DealerModel data) => json.encode(data.toJson());
 
 class DealerModel {
-  final String id;
-  final String dealerId;
-  final String name;
-  final String phone;
-  final List<Battery> battery;
+    final String? id;
+    final String? dealerId;
+    final String? name;
+    final String? phone;
+    final List<Battery>? battery;
 
-  DealerModel({
-    required this.id,
-    required this.dealerId,
-    required this.name,
-    required this.phone,
-    required this.battery,
-  });
+    DealerModel({
+        this.id,
+        this.dealerId,
+        this.name,
+        this.phone,
+        this.battery,
+    });
 
-  factory DealerModel.fromJson(Map<String, dynamic> json) => DealerModel(
+    factory DealerModel.fromJson(Map<String, dynamic> json) => DealerModel(
         id: json["id"],
         dealerId: json["dealer_id"],
         name: json["name"],
         phone: json["phone"],
-        battery:
-            List<Battery>.from(json["battery"].map((x) => Battery.fromJson(x))),
-      );
+        battery: json["battery"] == null ? [] : List<Battery>.from(json["battery"]!.map((x) => Battery.fromJson(x))),
+    );
 
-  Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toJson() => {
         "id": id,
         "dealer_id": dealerId,
         "name": name,
         "phone": phone,
-        "battery": List<dynamic>.from(battery.map((x) => x.toJson())),
-      };
+        "battery": battery == null ? [] : List<dynamic>.from(battery!.map((x) => x.toJson())),
+    };
 }
 
 class Battery {
-  final String id;
-  final String userId;
-  final dynamic image;
-  final String name;
-  final String batteryId;
-  final String status;
-  final String isAvailable;
+    final String? id;
+    final String? userId;
+    final String? name;
+    final String? batteryId;
 
-  Battery({
-    required this.id,
-    required this.userId,
-    this.image,
-    required this.name,
-    required this.batteryId,
-    required this.status,
-    required this.isAvailable,
-  });
+    Battery({
+        this.id,
+        this.userId,
+        this.name,
+        this.batteryId,
+    });
 
-  factory Battery.fromJson(Map<String, dynamic> json) => Battery(
+    factory Battery.fromJson(Map<String, dynamic> json) => Battery(
         id: json["id"],
         userId: json["user_id"],
-        image: json["image"],
         name: json["name"],
         batteryId: json["battery_id"],
-        status: json["status"],
-        isAvailable: json["is_available"],
-      );
+    );
 
-  Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toJson() => {
         "id": id,
         "user_id": userId,
-        "image": image,
         "name": name,
         "battery_id": batteryId,
-        "status": status,
-        "is_available": isAvailable,
-      };
+    };
 }

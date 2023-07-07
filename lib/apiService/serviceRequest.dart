@@ -5,7 +5,7 @@ class Api {
   final Dio _dio = Dio();
 
   Api() {
-    _dio.options.baseUrl = "https://hyperxenergy.com/switchx";
+    _dio.options.baseUrl = "https://admin.switchxenergy.com/";
     _dio.interceptors.add(PrettyDioLogger(
       request: true,
       error: true,
