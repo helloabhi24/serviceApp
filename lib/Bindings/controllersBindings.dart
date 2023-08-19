@@ -5,6 +5,7 @@ import 'package:service/controllers.dart/singinppagecontroller.dart';
 import 'package:service/localStorage/localStorage.dart';
 
 import '../controllers.dart/homepageController.dart';
+import '../controllers.dart/locationDetailsController.dart';
 
 class GetXbindings extends Bindings {
   @override
@@ -13,17 +14,16 @@ class GetXbindings extends Bindings {
     Get.lazyPut<BatteryDetailpageController>(
         () => BatteryDetailpageController(),
         fenix: true);
-          Get.lazyPut<SinginpageController>(
-        () => SinginpageController(),
+    Get.lazyPut<SinginpageController>(() => SinginpageController(),
         fenix: true);
 
-        Get.lazyPut<LocalStorageController>(
-        () => LocalStorageController(),
+    Get.lazyPut<LocalStorageController>(() => LocalStorageController(),
         fenix: true);
 
-          Get.lazyPut<GetDriverConnectController>(
-        () => GetDriverConnectController(),
+    Get.lazyPut<GetDriverConnectController>(() => GetDriverConnectController(),
         fenix: true);
-        
+
+    Get.lazyPut<LocationAccessController>(() => LocationAccessController(),
+        fenix: true);
   }
 }

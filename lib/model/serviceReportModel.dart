@@ -4,90 +4,101 @@
 
 import 'dart:convert';
 
-ServiceReportModel serviceReportModelFromJson(String str) => ServiceReportModel.fromJson(json.decode(str));
+ServiceReportModel serviceReportModelFromJson(String str) =>
+    ServiceReportModel.fromJson(json.decode(str));
 
-String serviceReportModelToJson(ServiceReportModel data) => json.encode(data.toJson());
+String serviceReportModelToJson(ServiceReportModel data) =>
+    json.encode(data.toJson());
 
 class ServiceReportModel {
-    final String? id;
-    final String? userId;
-    final String? serviceUserId;
-    final dynamic location;
-    final String? serviceProblem;
-    final DateTime? date;
-    final String? status;
-    final DateTime? createdOn;
-    final String? serviceUser;
-    final List<User>? user;
+  final String id;
+  final String userId;
+  final String serviceUserId;
+  final dynamic location;
+  final String serviceProblem;
+  final DateTime date;
+  final String status;
+  final String priorityBase;
+  final DateTime createdOn;
+  final String serviceUser;
+  final bool checkpriority;
+  final List<User> user;
 
-    ServiceReportModel({
-        this.id,
-        this.userId,
-        this.serviceUserId,
-        this.location,
-        this.serviceProblem,
-        this.date,
-        this.status,
-        this.createdOn,
-        this.serviceUser,
-        this.user,
-    });
+  ServiceReportModel({
+    required this.id,
+    required this.userId,
+    required this.serviceUserId,
+    this.location,
+    required this.serviceProblem,
+    required this.date,
+    required this.status,
+    required this.priorityBase,
+    required this.createdOn,
+    required this.serviceUser,
+    required this.checkpriority,
+    required this.user,
+  });
 
-    factory ServiceReportModel.fromJson(Map<String, dynamic> json) => ServiceReportModel(
+  factory ServiceReportModel.fromJson(Map<String, dynamic> json) =>
+      ServiceReportModel(
         id: json["id"],
         userId: json["user_id"],
         serviceUserId: json["serviceUser_id"],
         location: json["location"],
         serviceProblem: json["ServiceProblem"],
-        date: json["date"] == null ? null : DateTime.parse(json["date"]),
+        date: DateTime.parse(json["date"]),
         status: json["status"],
-        createdOn: json["created_on"] == null ? null : DateTime.parse(json["created_on"]),
+        priorityBase: json["priority_base"],
+        createdOn: DateTime.parse(json["created_on"]),
         serviceUser: json["service_user"],
-        user: json["user"] == null ? [] : List<User>.from(json["user"]!.map((x) => User.fromJson(x))),
-    );
+        checkpriority: json["checkpriority"],
+        user: List<User>.from(json["user"].map((x) => User.fromJson(x))),
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "user_id": userId,
         "serviceUser_id": serviceUserId,
         "location": location,
         "ServiceProblem": serviceProblem,
-        "date": date?.toIso8601String(),
+        "date": date.toIso8601String(),
         "status": status,
-        "created_on": createdOn?.toIso8601String(),
+        "priority_base": priorityBase,
+        "created_on": createdOn.toIso8601String(),
         "service_user": serviceUser,
-        "user": user == null ? [] : List<dynamic>.from(user!.map((x) => x.toJson())),
-    };
+        "checkpriority": checkpriority,
+        "user": List<dynamic>.from(user.map((x) => x.toJson())),
+      };
 }
 
 class User {
-    final String? name;
-    final String? email;
-    final String? phone;
-    final String? parmanentAddress;
-    final String? switchAddress;
+  final String name;
+  final String email;
+  final String phone;
+  final String parmanentAddress;
+  final String switchAddress;
 
-    User({
-        this.name,
-        this.email,
-        this.phone,
-        this.parmanentAddress,
-        this.switchAddress,
-    });
+  User({
+    required this.name,
+    required this.email,
+    required this.phone,
+    required this.parmanentAddress,
+    required this.switchAddress,
+  });
 
-    factory User.fromJson(Map<String, dynamic> json) => User(
+  factory User.fromJson(Map<String, dynamic> json) => User(
         name: json["name"],
         email: json["email"],
         phone: json["phone"],
         parmanentAddress: json["parmanent_address"],
         switchAddress: json["switch_address"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "name": name,
         "email": email,
         "phone": phone,
         "parmanent_address": parmanentAddress,
         "switch_address": switchAddress,
-    };
+      };
 }
