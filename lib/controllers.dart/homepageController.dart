@@ -556,11 +556,13 @@ class HomepageController extends GetxController {
   }
 
   Future getLocationFrequently() async {
+    double? lat;
+    double? lng;
     print("this is the value of serviceUser ID");
     print(serviceUserID.value);
     if (serviceUserID.value.isNotEmpty) {
       final Map<String, dynamic> data = <String, dynamic>{};
-      Map<String, dynamic> locationdata = <String, dynamic>{};
+      Map<double?, dynamic> locationdata = <double, dynamic>{};
       print("This is postion function call");
       // await determinePosition();
       print("this is the value of lat long in under the function");
@@ -568,7 +570,10 @@ class HomepageController extends GetxController {
       print(currLong.value);
       print("This is day function call");
       // await getDay();
-      locationdata = {"lat": currLat.value, "lng": currLong.value};
+      locationdata = {
+        lat: double.parse(currLat.value),
+        lng: double.parse(currLong.value)
+      };
       // locationdata["lng"] = currLong.value;
       data["service_user_id"] = serviceUserID.value;
       data["day"] = currDay.value;
