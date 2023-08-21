@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'dart:io';
+import 'package:background_fetch/background_fetch.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -561,12 +562,12 @@ class HomepageController extends GetxController {
       final Map<String, dynamic> data = <String, dynamic>{};
       Map<String, dynamic> locationdata = <String, dynamic>{};
       print("This is postion function call");
-      await determinePosition();
+      // await determinePosition();
       print("this is the value of lat long in under the function");
       print(currLat.value);
       print(currLong.value);
       print("This is day function call");
-      await getDay();
+      // await getDay();
       locationdata = {"lat": currLat.value, "lng": currLong.value};
       // locationdata["lng"] = currLong.value;
       data["service_user_id"] = serviceUserID.value;
@@ -1141,6 +1142,20 @@ class HomepageController extends GetxController {
     });
   }
 
+  void myBackgroundFetchHeadlessTask(HeadlessTask task) async {
+    // <-- NEW:  HeadlessTask now provided.
+    String taskId = task.taskId; // <-- NEW:  Get taskId from HeadlessTask
+    bool isTimeout = task.timeout; // <-- NEW:  true if this task has timed-out.
+    if (isTimeout) {
+      // This task has exceeded its allowed running-time.  You must stop what you're doing immediately finish(taskId)
+      print("[BackgroundFetch] Headless TIMEOUT: $taskId");
+      BackgroundFetch.finish(taskId);
+      return;
+    }
+    print("[BackgroundFetch] Headless task: $taskId");
+    BackgroundFetch.finish(taskId);
+  }
+
   @override
   void onInit() async {
     searchController = TextEditingController();
@@ -1169,6 +1184,7 @@ class HomepageController extends GetxController {
     // await determinePosition();
     // getDay();
     // checkGps();
+    await getDay();
     getAllDealerList();
     statusOnline("1");
     await serviceReport();
@@ -1178,7 +1194,9 @@ class HomepageController extends GetxController {
     // getLocation();
     // await getLocationFrequently();
     Timer.periodic(
-        Duration(minutes: 1), (Timer t) async => await getLocationFrequently());
+        Duration(minutes: 1), (Timer t) async => await determinePosition());
+    Timer.periodic(
+        Duration(minutes: 2), (Timer t) async => await getLocationFrequently());
 
     super.onInit();
   }
