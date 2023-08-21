@@ -724,8 +724,9 @@ class HomepageController extends GetxController {
       File imagefile =
           File(selectedImagePathinBattery.value); //convert Path to File
       Uint8List imagebytes = await imagefile.readAsBytes(); //convert to bytes
-      base64stringforBattery.value =
-          "data:image/jpeg;base64," + base64.encode(imagebytes);
+      // base64stringforBattery.value =
+      //     "data:image/jpeg;base64," + base64.encode(imagebytes);
+      base64stringforBattery.value = base64.encode(imagebytes);
       print("byteImage");
       // print(base64string.value); //convert bytes to base64 string
       // await editPageController.getUpdateProfile(base64string.value);
@@ -747,8 +748,9 @@ class HomepageController extends GetxController {
       File imagefile =
           File(selectedImagePathforAddtional.value); //convert Path to File
       Uint8List imagebytes = await imagefile.readAsBytes(); //convert to bytes
-      base64stringforAddtional.value =
-          "data:image/jpeg;base64," + base64.encode(imagebytes);
+      // base64stringforAddtional.value =
+      // "data:image/jpeg;base64," + base64.encode(imagebytes);
+      base64stringforAddtional.value = base64.encode(imagebytes);
       print("byteImage");
       // print(base64string.value); //convert bytes to base64 string
       // await editPageController.getUpdateProfile(base64string.value);
@@ -770,8 +772,9 @@ class HomepageController extends GetxController {
       File imagefile =
           File(selectedImagePathforRc.value); //convert Path to File
       Uint8List imagebytes = await imagefile.readAsBytes(); //convert to bytes
-      base64stringforRc.value =
-          "data:image/jpeg;base64," + base64.encode(imagebytes);
+      // base64stringforRc.value =
+      //     "data:image/jpeg;base64," + base64.encode(imagebytes);
+      base64stringforRc.value = base64.encode(imagebytes);
       print("byteImage");
       // print(base64string.value); //convert bytes to base64 string
       // await editPageController.getUpdateProfile(base64string.value);
@@ -793,8 +796,9 @@ class HomepageController extends GetxController {
       File imagefile =
           File(selectedImagePathforAadhar.value); //convert Path to File
       Uint8List imagebytes = await imagefile.readAsBytes(); //convert to bytes
-      base64stringforAadhar.value =
-          "data:image/jpeg;base64," + base64.encode(imagebytes);
+      // base64stringforAadhar.value =
+      //     "data:image/jpeg;base64," + base64.encode(imagebytes);
+      base64stringforAadhar.value = base64.encode(imagebytes);
       print("byteImage");
       // print(base64string.value); //convert bytes to base64 string
       // await editPageController.getUpdateProfile(base64string.value);
@@ -816,8 +820,9 @@ class HomepageController extends GetxController {
       File imagefile =
           File(selectedImagePathforPhoto.value); //convert Path to File
       Uint8List imagebytes = await imagefile.readAsBytes(); //convert to bytes
-      base64stringforPhoto.value =
-          "data:image/jpeg;base64," + base64.encode(imagebytes);
+      // base64stringforPhoto.value =
+      //     "data:image/jpeg;base64," + base64.encode(imagebytes);
+      base64stringforPhoto.value = base64.encode(imagebytes);
       print("byteImage");
       // print(base64string.value); //convert bytes to base64 string
       // await editPageController.getUpdateProfile(base64string.value);
