@@ -152,11 +152,12 @@ class UserDetail extends GetView<HomepageController> {
                       width25
                     ],
                   ),
-                  "SE012\nNorth-zone".f16w6(
-                      textAlign: TextAlign.center,
-                      fontSize: 14.sp,
-                      // fontWeight: FontWeight.w400,
-                      textColor: KColors.background),
+                  "${localStorageController.userServiceId.value}\n${localStorageController.userZone.value}"
+                      .f16w6(
+                          textAlign: TextAlign.center,
+                          fontSize: 14.sp,
+                          // fontWeight: FontWeight.w400,
+                          textColor: KColors.background),
                   width2
                 ],
               ),
@@ -220,12 +221,17 @@ class UserActivationPage extends GetView<HomepageController> {
                   final DateTime? picked = await showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
-                      firstDate: DateTime(2015),
-                      lastDate: DateTime(2029));
+                      // firstDate: DateTime(2015),
+                      // lastDate: DateTime(2029));
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime.now());
                   if (picked != null) {
                     controller.selectedDate.value =
                         picked.toString().split("00:00:00.000").first;
+                    print("This is value of selected Date");
+                    print(controller.selectedDate.value);
                     await controller.attendence();
+                    await controller.statusOnline("1");
                   }
                 },
                 child: Row(

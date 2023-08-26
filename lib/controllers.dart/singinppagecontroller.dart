@@ -28,10 +28,16 @@ class SinginpageController extends GetxController {
      showloadingIndicators();
       await ApiRepo().signInApi(data).then((value) async {
          if(value["status"]== 1){
-          localStorageController.setToken(value["data"]["id"]);
-          localStorageController.setUserName(value["data"]["name"]);
-          localStorageController.setUserEmail(value["data"]["email"]);
-          localStorageController.setUserImage(value["data"]["profile_image"]);
+          localStorageController.setToken(value["data"]["id"]??"");
+          localStorageController.setUserName(value["data"]["name"]??"");
+          localStorageController.setUserEmail(value["data"]["email"]??"");
+          localStorageController.setUserImage(value["data"]["profile_image"]??"");
+          localStorageController.setZone(value["data"]["zone"]??"");
+          localStorageController.setServiceId(value["data"]["service_id"]??"");
+          localStorageController.setOnlineStatus(value["data"]["is_online"]??"");
+          localStorageController.setPhoneNo(value["data"]["phone"]??"");
+          localStorageController.setSecurityPrice(value["data"]["security_price"]??"");
+          localStorageController.setPermanentAdd(value["data"]["permanent_address"]??"");
           print("profileimgae");
           print(value["data"]["profile_image"]);
           // userImage.value =  value["data"]["profile_image"];

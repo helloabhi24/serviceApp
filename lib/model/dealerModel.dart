@@ -10,22 +10,22 @@ DealerModel dealerModelFromJson(String str) =>
 String dealerModelToJson(DealerModel data) => json.encode(data.toJson());
 
 class DealerModel {
-  final String id;
-  final String dealerId;
-  final String profileImage;
-  final String multipleAttachment;
-  final String name;
-  final String email;
-  final String phone;
-  final String mobileToken;
-  final String password;
+  final dynamic id;
+  final dynamic dealerId;
+  final dynamic profileImage;
+  final dynamic multipleAttachment;
+  final dynamic name;
+  final dynamic email;
+  final dynamic phone;
+  final dynamic mobileToken;
+  final dynamic password;
   final dynamic adharGstinPan;
-  final String service;
-  final String securityPrice;
-  final String status;
-  final String isOnline;
-  final String parmanentAddress;
-  final String switchAddress;
+  final dynamic service;
+  final dynamic securityPrice;
+  final dynamic status;
+  final dynamic isOnline;
+  final dynamic parmanentAddress;
+  final dynamic switchAddress;
   final List<Battery> battery;
 
   DealerModel({

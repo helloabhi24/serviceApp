@@ -35,6 +35,7 @@ import '../view/battery&chargerPage.dart';
 import '../view/driverOnBoard.dart';
 import '../view/serviceReportPage.dart';
 import '../view/trackBatteries.dart';
+import '../view/yourConnectionPage.dart';
 
 class HomepageController extends GetxController {
   RxList<DealerModel> dealerList = <DealerModel>[].obs;
@@ -137,6 +138,7 @@ class HomepageController extends GetxController {
   // RxString userValue = "arun".obs;
   final userValue = Rxn<String>();
   RxString dealerID = "".obs;
+  RxBool attendenceStatus = false.obs;
 
   RxList problemTypeList = [
     "New Battery add",
@@ -228,7 +230,7 @@ class HomepageController extends GetxController {
     // },
     {
       "image": "assets/images/note.png",
-      "title": "Driver OnBoard",
+      "title": "Survey",
       "page": const DriverOnBoardPage()
     },
     {
@@ -241,6 +243,12 @@ class HomepageController extends GetxController {
       "image": "assets/images/id.png",
       "title": "Driver List",
       "page": const DriverIdPage()
+    },
+    {
+      "image": "assets/images/handshake.png",
+      // "title": "Driver\nConnect",
+      "title": "Your Connection",
+      "page": const YourConnectionPage()
     },
   ].obs;
 
@@ -336,6 +344,23 @@ class HomepageController extends GetxController {
     hideLoading();
   }
 
+  Future referForNewConnection() async {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["serviceuser_id"] = localStorageController.userToken.value;
+    data["name"] = nameConnectionController.text;
+    data["phone"] = phoneConnectionController.text;
+    data["status"] = "1";
+    try {
+      showloadingIndicators();
+      await ApiRepo().referDriver(data).then((value) {});
+    } catch (e) {
+      print(e.toString());
+    }
+    nameController.clear();
+    phoneController.clear();
+    hideLoading();
+  }
+
   Future statusOnline(String status) async {
     final Map<String, dynamic> data = <String, dynamic>{};
     data["serviceUser_id"] = localStorageController.userToken.value;
@@ -363,7 +388,9 @@ class HomepageController extends GetxController {
     data["location"] = address.value + pinCode.value + country.value;
     try {
       showloadingIndicators();
-      await ApiRepo().attendenceMark(data).then((value) {
+      await ApiRepo().attendenceMark(data).then((value) async {
+        await userAttendence();
+
         customeToast(value['message']);
       });
     } catch (e) {
@@ -371,6 +398,31 @@ class HomepageController extends GetxController {
     }
     nameController.clear();
     phoneController.clear();
+    hideLoading();
+  }
+
+  Future userAttendence() async {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    var now = new DateTime.now();
+    var formatter = new DateFormat('yyyy-MM-dd');
+    String formattedDate = formatter.format(now);
+    print("this is the value of date and service user id");
+    print(formattedDate);
+    print(localStorageController.userToken.value);
+    data["serviceUser_id"] = localStorageController.userToken.value;
+    data["date"] = formattedDate;
+    print(data);
+    try {
+      showloadingIndicators();
+      await ApiRepo().userAttendence(data).then((value) {
+        print("This is value of status ");
+        print(value['status']);
+        attendenceStatus.value = value['status'];
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+
     hideLoading();
   }
 
@@ -556,13 +608,13 @@ class HomepageController extends GetxController {
   }
 
   Future getLocationFrequently() async {
-    double? lat;
-    double? lng;
+    // double? lat;
+    // double? lng;
     print("this is the value of serviceUser ID");
     print(serviceUserID.value);
     if (serviceUserID.value.isNotEmpty) {
       final Map<String, dynamic> data = <String, dynamic>{};
-      Map<double?, dynamic> locationdata = <double, dynamic>{};
+      Map<String, dynamic> locationdata = <String, dynamic>{};
       print("This is postion function call");
       // await determinePosition();
       print("this is the value of lat long in under the function");
@@ -571,13 +623,18 @@ class HomepageController extends GetxController {
       print("This is day function call");
       // await getDay();
       locationdata = {
-        lat: double.parse(currLat.value),
-        lng: double.parse(currLong.value)
+        "lat": double.parse(currLat.value),
+        "lng": double.parse(currLong.value)
       };
+      // locationdata = {
+      //   "lat":currLat.value,
+      //   "lng": currLong.value
+      // };
       // locationdata["lng"] = currLong.value;
       data["service_user_id"] = serviceUserID.value;
       data["day"] = currDay.value;
       data["location"] = locationdata;
+      print("this is the value of data");
       print(data);
       try {
         // showloadingIndicators();
@@ -1190,23 +1247,36 @@ class HomepageController extends GetxController {
     await localStorageController.getUserEmail();
     await localStorageController.getUserName();
     await localStorageController.getUserImage();
+    await localStorageController.getUserZone();
+    await localStorageController.getUserServiceId();
+    await localStorageController.getOnlineStatus();
+    await localStorageController.getPhoneNum();
+    await localStorageController.getUserServiceId();
+    await localStorageController.getPermanentAddress();
+
     // getLocation();
     // await determinePosition();
     // getDay();
     // checkGps();
+    await userAttendence();
     await getDay();
     getAllDealerList();
-    statusOnline("1");
+    if (attendenceStatus.value == false) {
+      statusOnline("1");
+    }
+    // statusOnline("1");
     await serviceReport();
     getUserList();
     await getAllDealerList();
-    getDriverdetail();
+    await getDriverdetail();
     // getLocation();
-    // await getLocationFrequently();
+    await determinePosition();
+    await getLocationFrequently();
+
     Timer.periodic(
-        Duration(minutes: 1), (Timer t) async => await determinePosition());
+        Duration(seconds: 50), (Timer t) async => await determinePosition());
     Timer.periodic(
-        Duration(minutes: 2), (Timer t) async => await getLocationFrequently());
+        Duration(minutes: 1), (Timer t) async => await getLocationFrequently());
 
     super.onInit();
   }

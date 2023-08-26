@@ -1,4 +1,3 @@
-
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -7,7 +6,12 @@ class LocalStorageController extends GetxController {
   RxString userName = "".obs;
   RxString userEmail = "".obs;
   RxString userImage = "".obs;
-
+  RxString userZone = "".obs;
+  RxString userServiceId = "".obs;
+  RxString userOnlineStatus = "".obs;
+  RxString userPhone = "".obs;
+  RxString userSecurityPrice = "".obs;
+  RxString userPermanentAddress = "".obs;
 
   Future setToken(String tokenId) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -42,10 +46,75 @@ class LocalStorageController extends GetxController {
     return userEmail.value;
   }
 
-
   Future setUserImage(String image) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     pref.setString("userImage", image);
+  }
+
+  Future setZone(String zone) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString("userZone", zone);
+  }
+
+  getUserZone() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    userZone.value = pref.getString("userZone")!;
+    return userZone.value;
+  }
+
+  Future setServiceId(String serviceId) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString("userServiceId", serviceId);
+  }
+
+  getUserServiceId() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    userServiceId.value = pref.getString("userServiceId")!;
+    return userServiceId.value;
+  }
+
+  Future setOnlineStatus(String onlineStatus) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString("onlineStatus", onlineStatus);
+  }
+
+  getOnlineStatus() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    userOnlineStatus.value = pref.getString("onlineStatus")!;
+    return userOnlineStatus.value;
+  }
+
+  Future setPhoneNo(String phoneNum) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString("phoneNum", phoneNum);
+  }
+
+  getPhoneNum() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    userPhone.value = pref.getString("phoneNum")!;
+    return userPhone.value;
+  }
+
+  Future setSecurityPrice(String securityPrice) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString("securityPrice", securityPrice);
+  }
+
+  getSecurityPrice() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    userSecurityPrice.value = pref.getString("securityPrice")!;
+    return userSecurityPrice.value;
+  }
+
+  Future setPermanentAdd(String permanentAddress) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString("permanentAddress", permanentAddress);
+  }
+
+  getPermanentAddress() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    userPermanentAddress.value = pref.getString("permanentAddress")!;
+    return userPermanentAddress.value;
   }
 
   getUserImage() async {
@@ -61,11 +130,16 @@ class LocalStorageController extends GetxController {
   }
 
   @override
-  void onInit() async{
-   await getToken();
-   await getUserName();
-   await getUserEmail();
+  void onInit() async {
+    await getToken();
+    await getUserName();
+    await getUserEmail();
+    await getUserZone();
+    await getUserServiceId();
+    await getOnlineStatus();
+    await getPhoneNum();
+    await getSecurityPrice();
+    await getPermanentAddress();
     super.onInit();
   }
-
 }

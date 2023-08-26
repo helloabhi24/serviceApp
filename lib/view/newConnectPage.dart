@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:service/controllers.dart/homepageController.dart';
@@ -128,7 +129,7 @@ class NewConncetPage extends GetView<HomepageController> {
                           padding: EdgeInsets.symmetric(
                               horizontal: getHorizontalSize(5)),
                           child: AppText(
-                            text: "Phone Number",
+                            text: "PHONE NO.",
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
                           ),
@@ -159,8 +160,11 @@ class NewConncetPage extends GetView<HomepageController> {
                                 // ),
                                 //fillColor: Colors.green
                               ),
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(10),
+                              ],
                               validator: (val) {
-                                // if (val.length == 0) {
+                                // if (val!.length == 0) {
                                 //   return "Email cannot be empty";
                                 // } else {
                                 //   return null;
@@ -183,7 +187,7 @@ class NewConncetPage extends GetView<HomepageController> {
                           padding: EdgeInsets.symmetric(
                               horizontal: getHorizontalSize(5)),
                           child: AppText(
-                            text: "Date of onBoard",
+                            text: "DATE OF ONBOARD",
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
                           ),
@@ -203,7 +207,7 @@ class NewConncetPage extends GetView<HomepageController> {
                                   context: context,
                                   initialDate: DateTime.now(),
                                   //firstDate: DateTime(2015, 8),
-                                  firstDate: DateTime.now()
+                                  firstDate: DateTime(2015)
                                       .subtract(const Duration(days: 0)),
                                   lastDate: DateTime(2029));
                               if (picked != null &&
@@ -226,7 +230,7 @@ class NewConncetPage extends GetView<HomepageController> {
                               padding: const EdgeInsets.all(8.0),
                               child: Container(
                                 height: Get.height * 0.06,
-                                width: Get.width * 0.48,
+                                width: Get.width * 0.40,
                                 decoration: BoxDecoration(
                                     border: Border.all(
                                         color: KColors.background
@@ -261,7 +265,7 @@ class NewConncetPage extends GetView<HomepageController> {
                           padding: EdgeInsets.symmetric(
                               horizontal: getHorizontalSize(5)),
                           child: AppText(
-                            text: "User List",
+                            text: "USER LIST",
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
                           ),
@@ -283,7 +287,7 @@ class NewConncetPage extends GetView<HomepageController> {
                           padding: EdgeInsets.symmetric(
                               horizontal: getHorizontalSize(5)),
                           child: AppText(
-                            text: "Security",
+                            text: "SECURITY",
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
                           ),
@@ -315,6 +319,9 @@ class NewConncetPage extends GetView<HomepageController> {
                                 // ),
                                 //fillColor: Colors.green
                               ),
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(8),
+                              ],
                               validator: (val) {
                                 // if (val.length == 0) {
                                 //   return "Email cannot be empty";
@@ -368,6 +375,9 @@ class NewConncetPage extends GetView<HomepageController> {
                                 // ),
                                 //fillColor: Colors.green
                               ),
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(12),
+                              ],
                               validator: (val) {
                                 if (val!.length == 12) {
                                   return "Aadhar No.can't be empty";
@@ -451,7 +461,7 @@ class NewConncetPage extends GetView<HomepageController> {
                       padding: EdgeInsets.symmetric(
                           horizontal: getHorizontalSize(5)),
                       child: AppText(
-                        text: "Additional Details (Optional)",
+                        text: "ADDITIONAL DETAILS (Optional)",
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
                       ),
@@ -509,7 +519,7 @@ class NewConncetPage extends GetView<HomepageController> {
                     //   ),
                     // ),
                     GestureDetector(
-                      onTap: () {
+                      onTap: () async {
                         if (controller.nameConnectionController.text.isEmpty ||
                             controller.phoneConnectionController.text.isEmpty ||
                             controller
@@ -522,7 +532,8 @@ class NewConncetPage extends GetView<HomepageController> {
                                 .selectedImagePathforAadhar.value.isEmpty) {
                           customeToast("Please Enter All Fields");
                         } else {
-                          controller.addDrivers();
+                          await controller.referForNewConnection();
+                          await controller.addDrivers();
                           Get.back();
 
                           controller.nameConnectionController.clear();
@@ -539,6 +550,8 @@ class NewConncetPage extends GetView<HomepageController> {
                           controller.pathNameforAddtional.value = "";
                           controller.pathNameforPhoto.value = "";
                           controller.pathNameforRc.value = "";
+                          controller.selectedImagePathforAddtional.value = "";
+                          controller.pathNameforAddtional.value = "";
                         }
                       },
                       child: Padding(

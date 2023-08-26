@@ -20,4 +20,6 @@ class ServiceConstant {
   static const String ADD_DRIVER = "api/add_driver";
 
   static const String ADD_LOCATION = "api/locationdata";
+  static const String USER_ATTENDANCE = "api/check_service_user_attendance";
+
 }

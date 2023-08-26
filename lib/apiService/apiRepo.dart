@@ -417,4 +417,23 @@ class ApiRepo {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
   }
+  Future userAttendence(Map<String, dynamic> data) async {
+    try {
+      var response = await _api.request
+          .post(ServiceConstant.USER_ATTENDANCE, options: options, data: data)
+          .timeout(const Duration(seconds: 15));
+      if (response.statusCode == 200) {
+        var responseBody = jsonDecode(response.data);
+        return responseBody;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      errorSnackbar(getError(e));
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
 }

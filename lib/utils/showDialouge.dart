@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:restart_app/restart_app.dart';
 import 'package:service/constant/constant.dart';
 import 'package:service/controllers.dart/getBatteryController.dart';
 import 'package:service/controllers.dart/homepageController.dart';
 import 'package:service/localStorage/localStorage.dart';
 import 'package:service/utils/customElevatedButton.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../constant/sizeHelper.dart';
 import '../routes.dart/appRoutes.dart';
 import '../view/getBatteryPage.dart';
@@ -13,7 +15,10 @@ import 'customFormFields.dart';
 import 'customText.dart';
 
 HomepageController homepageController = Get.find();
+
 Future<void> showMyDialog(context) async {
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+
   return showDialog<void>(
     context: context,
     barrierDismissible: false, // user must tap button!
@@ -51,8 +56,10 @@ Future<void> showMyDialog(context) async {
               fontWeight: FontWeight.bold,
             ),
             onPressed: () async {
+              await preferences.clear();
               LocalStorageController().deleteToken();
               homepageController.statusOnline("0");
+              Restart.restartApp(webOrigin: '/loginpage');
               await Get.offNamed(
                 Routes.SINGINPAGE,
               );

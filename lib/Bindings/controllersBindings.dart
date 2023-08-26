@@ -25,5 +25,8 @@ class GetXbindings extends Bindings {
 
     Get.lazyPut<LocationAccessController>(() => LocationAccessController(),
         fenix: true);
+
+        Get.lazyPut<HomepageController>(() => HomepageController(),
+        fenix: true);
   }
 }

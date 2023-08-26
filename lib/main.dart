@@ -59,7 +59,7 @@ class _MyAppState extends State<MyApp> {
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
     // Configure BackgroundFetch.
-    HomepageController homepageController = Get.find();
+    // HomepageController homepageController = Get.find();
     int status = await BackgroundFetch.configure(
         BackgroundFetchConfig(
             minimumFetchInterval: 15,
