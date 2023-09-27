@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:service/controllers.dart/homepageController.dart';
 import 'package:service/utils/colors.dart';
 import 'package:service/utils/customAssetsImage.dart';
@@ -210,6 +211,14 @@ class DriverOnBoardPage extends GetView<HomepageController> {
                           ),
                         ),
                       ),
+                      Center(
+                        child: AppText(
+                          text: controller.msgDealer.value,
+                          color: controller.statusOfDealer.value == 0
+                              ? AppColor.redColor
+                              : AppColor.greenColor,
+                        ),
+                      ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
@@ -228,6 +237,12 @@ class DriverOnBoardPage extends GetView<HomepageController> {
                                 controller: controller.driverCountController,
                                 inputType: TextInputType.number,
                                 maxLength: 2,
+                                onChanged: (p0) {
+                                  if (controller
+                                      .dealerNameController.text.isNotEmpty) {
+                                    controller.checkSurvay();
+                                  }
+                                },
                               ),
                             )
                           ],
@@ -269,6 +284,12 @@ class DriverOnBoardPage extends GetView<HomepageController> {
                               width: 100,
                               height: 40,
                               child: CustomFormField(
+                                // onChanged: (c) {
+                                //   var now = new DateTime.now();
+                                //   var formatter = new DateFormat('hh:mm:ss');
+                                //   String formattedDate = formatter.format(now);
+                                //   print(formattedDate);
+                                // },
                                 controller: controller.chargerCountController,
                                 inputType: TextInputType.number,
                                 maxLength: 2,
@@ -351,7 +372,24 @@ class DriverOnBoardPage extends GetView<HomepageController> {
                         ),
                       ),
                       controller.fileSelectedWidgetForBattery(context),
+                      // getheight(context, 0.010),
+
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: AppText(
+                          text: "Remark",
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: CustomFormField(
+                            hint: "Add remark",
+                            controller: controller.remarkController),
+                      ),
                       getheight(context, 0.020),
+
                       // GestureDetector(
                       //   onTap: () {
                       //     if (controller.driverCountController.text.isEmpty ||
@@ -393,10 +431,11 @@ class DriverOnBoardPage extends GetView<HomepageController> {
                               controller.batteryCountController.text.isEmpty ||
                               controller.chargerCountController.text.isEmpty ||
                               controller.radioButton.value.isEmpty ||
-                              controller
-                                  .selectedImagePathinBattery.value.isEmpty) {
+                              // controller
+                              //     .selectedImagePathinBattery.value.isEmpty ||
+                              controller.remarkController.text.isEmpty) {
                             customeToast("Please Enter All Fields");
-                          } else {
+                          } else if (controller.statusOfDealer.value == 1) {
                             controller.getDealerSurveys();
                             Get.back();
                             controller.dealerNameController.clear();
@@ -406,6 +445,10 @@ class DriverOnBoardPage extends GetView<HomepageController> {
                             controller.radioButton.value = "";
                             controller.selectedImagePathinBattery.value = "";
                             controller.pathNameforBattery.value = "";
+                            controller.remarkController.clear();
+                            // controller.userValue.value = "  All";
+                          } else {
+                            customeToast("Please Enter Dealer");
                           }
                         },
                         child: Padding(

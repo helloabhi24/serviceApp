@@ -38,7 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     height: Get.height * 0.50,
                     boxFit: BoxFit.cover,
                     imagePath: Constant().logo),
-                nextScreen: localStorageController.userToken.value.isEmpty?  const SignInPage(): const Homepage() ,
+                nextScreen: localStorageController.userToken.value.isEmpty?   SignInPage(): const Homepage() ,
                 // token.isNotEmpty ? const MainPage() : const SignInPage(),
                 splashTransition: SplashTransition.scaleTransition,
               ),

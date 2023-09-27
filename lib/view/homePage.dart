@@ -124,7 +124,7 @@ class Homepage extends GetView<HomepageController> {
                     // ),
                     child: Column(
                       children: [
-                        height5,
+                        height8,
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -138,7 +138,7 @@ class Homepage extends GetView<HomepageController> {
                               //     controller.getdealerList[index].name!,
                               text: localStorageController.userName.value,
                               fontSize: 17.sp,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w500,
                             )
                           ],
                         ),
@@ -153,7 +153,7 @@ class Homepage extends GetView<HomepageController> {
                                   AppText(
                                     text: "SERVICE USER ID",
                                     fontSize: 15.sp,
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                   AppText(
                                     // text: homepageController
@@ -161,7 +161,7 @@ class Homepage extends GetView<HomepageController> {
                                     text: localStorageController
                                         .userServiceId.value,
                                     fontSize: 15.sp,
-                                    fontWeight: FontWeight.w500,
+                                    fontWeight: FontWeight.w400,
                                   ),
                                 ],
                               ),
@@ -173,14 +173,14 @@ class Homepage extends GetView<HomepageController> {
                                   AppText(
                                     text: "NAME",
                                     fontSize: 15.sp,
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                   AppText(
                                     // text: homepageController
                                     //     .getdealerList[index].name!,
                                     text: localStorageController.userName.value,
                                     fontSize: 15.sp,
-                                    fontWeight: FontWeight.w500,
+                                    fontWeight: FontWeight.w400,
                                   ),
                                 ],
                               ),
@@ -192,7 +192,7 @@ class Homepage extends GetView<HomepageController> {
                                   AppText(
                                     text: "EMAIL ID",
                                     fontSize: 15.sp,
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                   AppText(
                                     // text: homepageController
@@ -200,7 +200,7 @@ class Homepage extends GetView<HomepageController> {
                                     text:
                                         localStorageController.userEmail.value,
                                     fontSize: 15.sp,
-                                    fontWeight: FontWeight.w500,
+                                    fontWeight: FontWeight.w400,
                                   ),
                                 ],
                               ),
@@ -212,7 +212,7 @@ class Homepage extends GetView<HomepageController> {
                                   AppText(
                                     text: "PHONE NUMBER",
                                     fontSize: 15.sp,
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                   AppText(
                                     // text: homepageController
@@ -220,7 +220,7 @@ class Homepage extends GetView<HomepageController> {
                                     text:
                                         localStorageController.userPhone.value,
                                     fontSize: 15.sp,
-                                    fontWeight: FontWeight.w500,
+                                    fontWeight: FontWeight.w400,
                                   ),
                                 ],
                               ),
@@ -253,7 +253,7 @@ class Homepage extends GetView<HomepageController> {
                                   AppText(
                                     text: "ONLINE",
                                     fontSize: 15.sp,
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                   AppText(
                                     // text: homepageController
@@ -261,7 +261,7 @@ class Homepage extends GetView<HomepageController> {
                                     text: localStorageController
                                         .userOnlineStatus.value,
                                     fontSize: 15.sp,
-                                    fontWeight: FontWeight.w500,
+                                    fontWeight: FontWeight.w400,
                                   ),
                                 ],
                               ),
@@ -273,14 +273,14 @@ class Homepage extends GetView<HomepageController> {
                                   AppText(
                                     text: "ZONE",
                                     fontSize: 15.sp,
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                   AppText(
                                     // text: homepageController
                                     //     .getdealerList[index].dealerId!,
                                     text: localStorageController.userZone.value,
                                     fontSize: 15.sp,
-                                    fontWeight: FontWeight.w500,
+                                    fontWeight: FontWeight.w400,
                                   ),
                                 ],
                               ),
@@ -292,7 +292,7 @@ class Homepage extends GetView<HomepageController> {
                                   AppText(
                                     text: "ADDRESS",
                                     fontSize: 15.sp,
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                   Expanded(
                                     child: AppText(
@@ -302,7 +302,7 @@ class Homepage extends GetView<HomepageController> {
                                       text: localStorageController
                                           .userPermanentAddress.value,
                                       fontSize: 15.sp,
-                                      fontWeight: FontWeight.w500,
+                                      fontWeight: FontWeight.w400,
                                       // textOverflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.right,
                                     ),
@@ -543,6 +543,8 @@ class Homepage extends GetView<HomepageController> {
                 vertical: getVerticalSize(10)),
             child: RefreshIndicator(
               onRefresh: () async {
+                await localStorageController.getToken();
+
                 await controller.userAttendence();
                 await controller.getDay();
                 controller.getAllDealerList();
@@ -615,7 +617,9 @@ class Homepage extends GetView<HomepageController> {
                                           Get.to(controller.menuList[index]
                                               ["page"]);
                                           // index == 0 ? Get.to(const StationsPage()) : null;
-                                          if (index == 0 || index == 1) {
+                                          if (index == 0 ||
+                                              index == 1 ||
+                                              index == 3) {
                                             await controller.getDealerList("");
                                             await controller.serviceReport();
                                             Get.to(controller.menuList[index]

@@ -145,22 +145,57 @@ class ChatsWithPerson extends GetView<HomepageController> {
                                                   print("This is url of image");
                                                   print(dataSnapshot.docs[index]
                                                       ["image"]);
+                                                  print(
+                                                      "This is decode of base64");
+                                                  print(DecorationImage(
+                                                    image: MemoryImage(
+                                                        base64Decode(
+                                                            dataSnapshot
+                                                                    .docs[index]
+                                                                ["image"])),
+                                                  ));
+                                                  // print(utf8.decode(base64Url
+                                                  //     .decode(dataSnapshot
+                                                  //             .docs[index]
+                                                  //         ["image"])));
+                                                  // print(utf8
+                                                  //     .fuse(base64)
+                                                  //     .decode(dataSnapshot
+                                                  //             .docs[index]
+                                                  //         ["image"]));
+
                                                   showAnimatedDialog(
                                                     context: context,
                                                     barrierDismissible: true,
                                                     builder:
                                                         (BuildContext context) {
                                                       return Center(
-                                                        child:
-                                                            CachedNetworkImage(
-                                                          // height: Get.height * 0.40,
-                                                          // width: Get.width * 0.50,
-                                                          imageUrl: dataSnapshot
-                                                                  .docs[index]
-                                                              ["image"],
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                      );
+                                                          child:
+                                                              //     CachedNetworkImage(
+                                                              //   // height:
+                                                              //   // Get.height * 0.80,
+                                                              //   // width:
+                                                              //   // Get.width * 0.50,
+                                                              //   imageUrl: dataSnapshot
+                                                              //           .docs[index]
+                                                              //       ["image"],
+                                                              //   fit: BoxFit.cover,
+                                                              // ),
+                                                              Container(
+                                                        // height: 200,
+                                                        // width: 100,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                                image:
+                                                                    DecorationImage(
+                                                          image: MemoryImage(
+                                                              base64Decode(
+                                                                  dataSnapshot.docs[
+                                                                          index]
+                                                                      [
+                                                                      "image"])),
+                                                        )),
+                                                      ));
                                                     },
                                                     animationType:
                                                         DialogTransitionType
@@ -270,8 +305,10 @@ class ChatsWithPerson extends GetView<HomepageController> {
                         : KColors.persistentBlack,
                     minRadius: 20,
                     child: IconButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          print("helo");
                           controller.sendMessage("allchats");
+                          await controller.allUserToken();
                           String msg = controller.chatController.text.trim();
                           controller.chatController.clear();
                           if (msg != "") {

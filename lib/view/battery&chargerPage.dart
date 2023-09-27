@@ -42,7 +42,7 @@ class BatteryAndChargerPage extends GetView<HomepageController> {
           padding: EdgeInsets.symmetric(
               vertical: getVerticalSize(20), horizontal: getHorizontalSize(10)),
           child: SizedBox(
-            height: Get.height * 0.40,
+            height: Get.height * 0.60,
             child: GridView.builder(
               addRepaintBoundaries: true,
               shrinkWrap: true,

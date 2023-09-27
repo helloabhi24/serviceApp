@@ -85,18 +85,22 @@ class _DropDownState extends State<DropDown> {
                 print(value.name);
                 homepageController.dealerNameController.text = value.name;
                 print("this is value of dealer in dropdown");
+                homepageController.dealerIdOld.value = value.id;
+
                 print(value.name);
               },
             );
           }).toList(),
 
           onChanged: (String? newValue) {
-            setState(() {
+            setState(() async {
               homepageController.userValue.value = newValue!;
               // walletTransactionController.cardV.value = newValue!;
               print("This is new value of in onchanged");
               print(newValue);
               print(homepageController.userValue.value);
+              await homepageController.checkSurvay();
+
               // cardManagementController.cardValuee.value = newValue;
               // _selectedItem = newValue ?? "";
             });

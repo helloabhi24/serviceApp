@@ -14,7 +14,7 @@ class DealerModel {
   final dynamic dealerId;
   final dynamic profileImage;
   final dynamic multipleAttachment;
-  final dynamic name;
+  final String name;
   final dynamic email;
   final dynamic phone;
   final dynamic mobileToken;

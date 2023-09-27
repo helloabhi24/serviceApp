@@ -7,6 +7,7 @@ import 'package:service/controllers.dart/batteryDetailPageController.dart';
 import 'package:service/controllers.dart/homepageController.dart';
 import 'package:service/utils/customAssetsImage.dart';
 import 'package:service/utils/customText.dart';
+import 'package:service/view/swapBatteryHistoryPage.dart';
 import '../constant/sizeHelper.dart';
 import '../utils/constant.dart';
 import '../utils/customToast.dart';
@@ -85,315 +86,325 @@ class DriverDetailsPage extends GetView<BatteryDetailpageController> {
                       itemBuilder: (context, index1) {
                         return Padding(
                           padding: const EdgeInsets.all(10.0),
-                          child: Card(
-                            shadowColor: Colors.red[50],
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                  color: Color.fromARGB(255, 238, 216, 215)),
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                            borderOnForeground: false,
-                            color: Colors.red[50],
-                            elevation: 8,
-                            // height: Get.height * 0.38,
-                            // margin: EdgeInsets.all(5),
-                            // padding: EdgeInsets.all(4),
-                            // decoration: BoxDecoration(
-                            //     border: Border.all(color: KColors.lightGrey),
-                            //     borderRadius: BorderRadius.circular(8)),
-                            child: Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 5),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        AppText(
-                                          text: "ID",
-                                          fontSize: 15.sp,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                        AppText(
-                                          text: homepageController
-                                                  .getDriverDetailList[
-                                                      Get.arguments]
-                                                  .driver![index1]
-                                                  .id ??
-                                              "",
-                                          fontSize: 15.sp,
-                                          fontWeight: FontWeight.w600,
-                                          color: KColors.persistentBlack
-                                              .withOpacity(0.5),
-                                        ),
-                                      ],
+                          child: GestureDetector(
+                            onTap: () async {
+                              await homepageController.swapBatteriesHistory(
+                                  homepageController
+                                      .getDriverDetailList[Get.arguments]
+                                      .driver![index1]
+                                      .driverId!);
+                                      Get.to(()=>SwapBatteryHistoryPage());
+                            },
+                            child: Card(
+                              shadowColor: Colors.red[50],
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                    color: Color.fromARGB(255, 238, 216, 215)),
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              borderOnForeground: false,
+                              color: Colors.red[50],
+                              elevation: 8,
+                              // height: Get.height * 0.38,
+                              // margin: EdgeInsets.all(5),
+                              // padding: EdgeInsets.all(4),
+                              // decoration: BoxDecoration(
+                              //     border: Border.all(color: KColors.lightGrey),
+                              //     borderRadius: BorderRadius.circular(8)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 5),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          AppText(
+                                            text: "ID",
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                          AppText(
+                                            text: homepageController
+                                                    .getDriverDetailList[
+                                                        Get.arguments]
+                                                    .driver![index1]
+                                                    .id ??
+                                                "",
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w600,
+                                            color: KColors.persistentBlack
+                                                .withOpacity(0.5),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 5),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        AppText(
-                                          text: "Driver ID",
-                                          fontSize: 15.sp,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                        AppText(
-                                          text: homepageController
-                                                  .getDriverDetailList[
-                                                      Get.arguments]
-                                                  .driver![index1]
-                                                  .driverId ??
-                                              "",
-                                          fontSize: 15.sp,
-                                          fontWeight: FontWeight.w600,
-                                          color: KColors.persistentBlack
-                                              .withOpacity(0.5),
-                                        ),
-                                      ],
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 5),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          AppText(
+                                            text: "Driver ID",
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                          AppText(
+                                            text: homepageController
+                                                    .getDriverDetailList[
+                                                        Get.arguments]
+                                                    .driver![index1]
+                                                    .driverId ??
+                                                "",
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w600,
+                                            color: KColors.persistentBlack
+                                                .withOpacity(0.5),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 5),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        AppText(
-                                          text: "User ID",
-                                          fontSize: 15.sp,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                        AppText(
-                                          text: homepageController
-                                                  .getDriverDetailList[
-                                                      Get.arguments]
-                                                  .driver![index1]
-                                                  .userId ??
-                                              "",
-                                          fontSize: 15.sp,
-                                          fontWeight: FontWeight.w600,
-                                          color: KColors.persistentBlack
-                                              .withOpacity(0.5),
-                                        ),
-                                      ],
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 5),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          AppText(
+                                            text: "User ID",
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                          AppText(
+                                            text: homepageController
+                                                    .getDriverDetailList[
+                                                        Get.arguments]
+                                                    .driver![index1]
+                                                    .userId ??
+                                                "",
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w600,
+                                            color: KColors.persistentBlack
+                                                .withOpacity(0.5),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  // Padding(
-                                  //   padding: const EdgeInsets.only(bottom: 5),
-                                  //   child: Row(
-                                  //     mainAxisAlignment:
-                                  //         MainAxisAlignment.spaceBetween,
-                                  //     children: [
-                                  //       AppText(
-                                  //         text: "ProfileImage",
-                                  //         fontSize: 15.sp,
-                                  //         fontWeight: FontWeight.w600,
-                                  //       ),
-                                  //       AppText(
-                                  //         text: homepageController
-                                  //                 .getDriverDetailList[
-                                  //                     Get.arguments]
-                                  //                 .driver![index1]
-                                  //                 .profileImage ??
-                                  //             "",
-                                  //         fontSize: 15.sp,
-                                  //         fontWeight: FontWeight.w600,
-                                  //         color: KColors.persistentBlack
-                                  //             .withOpacity(0.5),
-                                  //       ),
-                                  //     ],
-                                  //   ),
-                                  // ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 5),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        AppText(
-                                          text: "Name",
-                                          fontSize: 15.sp,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                        AppText(
-                                          text: homepageController
-                                                  .getDriverDetailList[
-                                                      Get.arguments]
-                                                  .driver![index1]
-                                                  .name ??
-                                              "",
-                                          fontSize: 15.sp,
-                                          fontWeight: FontWeight.w600,
-                                          color: KColors.persistentBlack
-                                              .withOpacity(0.5),
-                                        ),
-                                      ],
+                                    // Padding(
+                                    //   padding: const EdgeInsets.only(bottom: 5),
+                                    //   child: Row(
+                                    //     mainAxisAlignment:
+                                    //         MainAxisAlignment.spaceBetween,
+                                    //     children: [
+                                    //       AppText(
+                                    //         text: "ProfileImage",
+                                    //         fontSize: 15.sp,
+                                    //         fontWeight: FontWeight.w600,
+                                    //       ),
+                                    //       AppText(
+                                    //         text: homepageController
+                                    //                 .getDriverDetailList[
+                                    //                     Get.arguments]
+                                    //                 .driver![index1]
+                                    //                 .profileImage ??
+                                    //             "",
+                                    //         fontSize: 15.sp,
+                                    //         fontWeight: FontWeight.w600,
+                                    //         color: KColors.persistentBlack
+                                    //             .withOpacity(0.5),
+                                    //       ),
+                                    //     ],
+                                    //   ),
+                                    // ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 5),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          AppText(
+                                            text: "Name",
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                          AppText(
+                                            text: homepageController
+                                                    .getDriverDetailList[
+                                                        Get.arguments]
+                                                    .driver![index1]
+                                                    .name ??
+                                                "",
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w600,
+                                            color: KColors.persistentBlack
+                                                .withOpacity(0.5),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 5),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        AppText(
-                                          text: "Security",
-                                          fontSize: 15.sp,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                        AppText(
-                                          text: homepageController
-                                                  .getDriverDetailList[
-                                                      Get.arguments]
-                                                  .driver![index1]
-                                                  .security ??
-                                              "",
-                                          fontSize: 15.sp,
-                                          fontWeight: FontWeight.w600,
-                                          color: KColors.persistentBlack
-                                              .withOpacity(0.5),
-                                        ),
-                                      ],
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 5),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          AppText(
+                                            text: "Security",
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                          AppText(
+                                            text: homepageController
+                                                    .getDriverDetailList[
+                                                        Get.arguments]
+                                                    .driver![index1]
+                                                    .security ??
+                                                "",
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w600,
+                                            color: KColors.persistentBlack
+                                                .withOpacity(0.5),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 5),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        AppText(
-                                          text: "Name",
-                                          fontSize: 15.sp,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                        AppText(
-                                          text: homepageController
-                                                  .getDriverDetailList[
-                                                      Get.arguments]
-                                                  .driver![index1]
-                                                  .name ??
-                                              "",
-                                          fontSize: 15.sp,
-                                          fontWeight: FontWeight.w600,
-                                          color: KColors.persistentBlack
-                                              .withOpacity(0.5),
-                                        ),
-                                      ],
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 5),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          AppText(
+                                            text: "Name",
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                          AppText(
+                                            text: homepageController
+                                                    .getDriverDetailList[
+                                                        Get.arguments]
+                                                    .driver![index1]
+                                                    .name ??
+                                                "",
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w600,
+                                            color: KColors.persistentBlack
+                                                .withOpacity(0.5),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 5),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        AppText(
-                                          text: "Phone",
-                                          fontSize: 15.sp,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                        AppText(
-                                          text: homepageController
-                                                  .getDriverDetailList[
-                                                      Get.arguments]
-                                                  .driver![index1]
-                                                  .phone ??
-                                              "",
-                                          fontSize: 15.sp,
-                                          fontWeight: FontWeight.w600,
-                                          color: KColors.persistentBlack
-                                              .withOpacity(0.5),
-                                        ),
-                                      ],
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 5),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          AppText(
+                                            text: "Phone",
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                          AppText(
+                                            text: homepageController
+                                                    .getDriverDetailList[
+                                                        Get.arguments]
+                                                    .driver![index1]
+                                                    .phone ??
+                                                "",
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w600,
+                                            color: KColors.persistentBlack
+                                                .withOpacity(0.5),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 5),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        AppText(
-                                          text: "Addhar Number",
-                                          fontSize: 15.sp,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                        AppText(
-                                          text: homepageController
-                                                  .getDriverDetailList[
-                                                      Get.arguments]
-                                                  .driver![index1]
-                                                  .adharGstinPan ??
-                                              "",
-                                          fontSize: 15.sp,
-                                          fontWeight: FontWeight.w600,
-                                          color: KColors.persistentBlack
-                                              .withOpacity(0.5),
-                                        ),
-                                      ],
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 5),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          AppText(
+                                            text: "Addhar Number",
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                          AppText(
+                                            text: homepageController
+                                                    .getDriverDetailList[
+                                                        Get.arguments]
+                                                    .driver![index1]
+                                                    .adharGstinPan ??
+                                                "",
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w600,
+                                            color: KColors.persistentBlack
+                                                .withOpacity(0.5),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 5),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        AppText(
-                                          text: "Penality",
-                                          fontSize: 15.sp,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                        AppText(
-                                          text: homepageController
-                                                  .getDriverDetailList[
-                                                      Get.arguments]
-                                                  .driver![index1]
-                                                  .penality ??
-                                              "",
-                                          fontSize: 15.sp,
-                                          fontWeight: FontWeight.w600,
-                                          color: KColors.persistentBlack
-                                              .withOpacity(0.5),
-                                        ),
-                                      ],
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 5),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          AppText(
+                                            text: "Penality",
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                          AppText(
+                                            text: homepageController
+                                                    .getDriverDetailList[
+                                                        Get.arguments]
+                                                    .driver![index1]
+                                                    .penality ??
+                                                "",
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w600,
+                                            color: KColors.persistentBlack
+                                                .withOpacity(0.5),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 5),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        AppText(
-                                          text: "Created",
-                                          fontSize: 15.sp,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                        AppText(
-                                          text: homepageController
-                                              .getDriverDetailList[
-                                                  Get.arguments]
-                                              .driver![index1]
-                                              .createdOn!
-                                              .toString()
-                                              .split("00:00:00.000")
-                                              .first,
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.w600,
-                                          color: KColors.persistentBlack
-                                              .withOpacity(0.5),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 5),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          AppText(
+                                            text: "Created",
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                          AppText(
+                                            text: homepageController
+                                                .getDriverDetailList[
+                                                    Get.arguments]
+                                                .driver![index1]
+                                                .createdOn!
+                                                .toString()
+                                                .split("00:00:00.000")
+                                                .first,
+                                            fontSize: 16.sp,
+                                            fontWeight: FontWeight.w600,
+                                            color: KColors.persistentBlack
+                                                .withOpacity(0.5),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),

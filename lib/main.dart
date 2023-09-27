@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:background_fetch/background_fetch.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -10,6 +12,7 @@ import 'package:service/routes.dart/appPage.dart';
 import 'package:service/view/spalshScreen.dart';
 import 'package:uuid/uuid.dart';
 import 'Bindings/controllersBindings.dart';
+import 'model/notificationClass.dart';
 
 var uuid = const Uuid();
 
@@ -29,11 +32,53 @@ void backgroundFetchHeadlessTask(HeadlessTask task) async {
   BackgroundFetch.finish(taskId);
 }
 
+NotificationSetting notificationSetting = NotificationSetting();
+
+// FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+// Future<void> getFirebaseMessegingToken() async {
+//   NotificationSettings settings = await messaging.requestPermission();
+//   // print('User granted permission: ${settings.authorizationStatus}');
+//   String? token = await messaging.getToken();
+//   // .then((value) {
+//   //   if (value != null) {
+//   //     print("this is the token dsfasdfsdafs");
+//   //     print(value);
+//   //     debugPrint('Push Token: $value');
+//   //   }
+//   // }
+//   // );
+//   print("this is the value of token");
+//   print(token);
+//   print(settings.authorizationStatus);
+// }
+
+// void isTokenRefershed() {
+//   messaging.onTokenRefresh.listen((event) {
+//     event.toString();
+//   });
+// }
+
+// void firebaseInit() {
+//   FirebaseMessaging.onMessage.listen((event) {
+//     print("this is the msg");
+//     print(event.notification!.title.toString());
+//     print(event.notification!.body.toString());
+//   });
+// }
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(const MyApp());
   BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
+}
+
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print(message.notification!.title.toString());
 }
 
 class MyApp extends StatefulWidget {
@@ -54,6 +99,10 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     initPlatformState();
+    notificationSetting.isTokenRefershed();
+    notificationSetting.getFirebaseMessegingToken();
+    notificationSetting.firebaseInit(context);
+    notificationSetting.setupInteactMessage(context);
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.

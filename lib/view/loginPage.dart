@@ -1,11 +1,12 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:service/constant/constant.dart';
 import 'package:service/controllers.dart/singinppagecontroller.dart';
+import 'package:service/localStorage/localStorage.dart';
 import 'package:service/utils/constant.dart';
 import 'package:service/utils/customToast.dart';
+import 'package:service/utils/showDialouge.dart';
 import '../constant/sizeHelper.dart';
 import '../utils/customElevatedButton.dart';
 import '../utils/customFormFields.dart';
@@ -13,17 +14,18 @@ import '../utils/customText.dart';
 import '../utils/validation.dart';
 
 class SignInPage extends GetView<SinginpageController> with Validation {
-  const SignInPage({super.key});
+  SignInPage({super.key});
+  LocalStorageController localStorageController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SingleChildScrollView(  
+        body: SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       child: Stack(children: [
         Container(
           height: Get.height,
           width: Get.width,
-          decoration:  BoxDecoration(
+          decoration: BoxDecoration(
               image: DecorationImage(
                   image: AssetImage(Constant().splashScreen2),
                   fit: BoxFit.cover)),
@@ -93,8 +95,8 @@ class SignInPage extends GetView<SinginpageController> with Validation {
                                           fontWeight: FontWeight.w600,
                                         ),
                                         getheight(context, 0.02),
-                                        CustomFormField(inputType: TextInputType.text,
-
+                                        CustomFormField(
+                                          inputType: TextInputType.text,
                                           icons: Icons.lock,
                                           contentPadding: EdgeInsets.symmetric(
                                               horizontal: getHorizontalSize(10),
@@ -127,14 +129,55 @@ class SignInPage extends GetView<SinginpageController> with Validation {
                                         text: "SignIn",
                                       ),
                                       textButton: "SignIn",
-                                      ontap: () async{
-                                        if(controller.signinformKey.currentState!.validate()){
-                                           await  controller.signin();
-                                           
-                                        }else{
-                                          customeToast("all fileds are required");
+                                      ontap: () async {
+                                        if (controller
+                                            .signinformKey.currentState!
+                                            .validate()) {
+                                          await controller.signin();
+
+                                          // await localStorageController
+                                          //     .getToken();
+                                          // await localStorageController
+                                          //     .getUserEmail();
+                                          // await localStorageController
+                                          //     .getUserName();
+                                          // await localStorageController
+                                          //     .getUserImage();
+                                          // await localStorageController
+                                          //     .getUserZone();
+                                          // await localStorageController
+                                          //     .getUserServiceId();
+                                          // await localStorageController
+                                          //     .getOnlineStatus();
+                                          // await localStorageController
+                                          //     .getPhoneNum();
+                                          // await localStorageController
+                                          //     .getUserServiceId();
+                                          // await localStorageController
+                                          //     .getPermanentAddress();
+
+                                          await homepageController
+                                              .userAttendence();
+                                          await homepageController.getDay();
+                                          homepageController.getAllDealerList();
+                                          // homepageController.statusOnline("1");
+                                          if (homepageController
+                                                  .attendenceStatus.value ==
+                                              false) {
+                                            homepageController
+                                                .statusOnline("1");
+                                          }
+                                          await homepageController
+                                              .serviceReport();
+                                          homepageController.getUserList();
+                                          await homepageController
+                                              .getAllDealerList();
+                                          await homepageController
+                                              .getDriverdetail();
+                                        } else {
+                                          customeToast(
+                                              "all fileds are required");
                                         }
-                                      
                                       }),
                                 ),
                               ),

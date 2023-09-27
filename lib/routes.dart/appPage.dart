@@ -17,10 +17,9 @@ class AppPage {
         name: "/batterydetailpage",
         page: (() => const BatteryDetailPage()),
         binding: GetXbindings()),
-
-        GetPage(
+    GetPage(
         name: "/singinpage",
-        page: (() => const SignInPage()),
+        page: (() => SignInPage()),
         binding: GetXbindings()),
   ];
 }

@@ -6,7 +6,9 @@ import 'package:service/constant/constant.dart';
 import 'package:service/controllers.dart/getBatteryController.dart';
 import 'package:service/controllers.dart/homepageController.dart';
 import 'package:service/localStorage/localStorage.dart';
+import 'package:service/utils/colors.dart';
 import 'package:service/utils/customElevatedButton.dart';
+import 'package:service/utils/customToast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../constant/sizeHelper.dart';
 import '../routes.dart/appRoutes.dart';
@@ -161,13 +163,13 @@ batteryChargerProblems(context) {
           builder: (context, setState) {
             return AlertDialog(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(10)),
                 title: Column(
                   children: [
                     AppText(
                       color: KColors.persistentBlack,
-                      text: "Generate battery qr problem",
-                      fontSize: 14.sp,
+                      text: "Generate Battery QR Problem",
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
                     ),
                     height10,
@@ -184,47 +186,84 @@ batteryChargerProblems(context) {
                       ),
                     ),
                     height5,
-                    CustomFormField(
+                    TextFormField(
+                      decoration: InputDecoration(
+                          labelText: "Battery ID",
+                          border: OutlineInputBorder()),
                       controller: homepageController.batteryID,
-                      hint: "Battry ID",
                     ),
+                    // CustomFormField(
+                    //   controller: homepageController.batteryID,
+                    //   hint: "Battery ID",
+                    // ),
                     height5,
-                    CustomFormField(
-                        maxLines: true,
-                        controller: homepageController.aboutProblemController,
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: getVerticalSize(10),
-                            horizontal: getHorizontalSize(10)),
-                        hint: "Description"),
+                    TextFormField(
+                      maxLines: 5,
+                      decoration: InputDecoration(
+                          labelText: "Description",
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: getVerticalSize(10),
+                              horizontal: getHorizontalSize(10))),
+                      controller: homepageController.aboutProblemController,
+                    ),
+                    // CustomFormField(
+                    //     maxLines: true,
+                    //     controller: homepageController.aboutProblemController,
+                    //     contentPadding: EdgeInsets.symmetric(
+                    //         vertical: getVerticalSize(10),
+                    //         horizontal: getHorizontalSize(10)),
+                    //     hint: "Description"),
                     height5,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        TextButton(
-                          child: AppText(
-                            color: KColors.persistentBlack,
-                            text: "Cancel",
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.bold,
+                        Card(
+                          // color: AppColor.redColor.shade400,
+                          elevation: 3,
+                          shadowColor: AppColor.redColor,
+                          child: TextButton(
+                            child: AppText(
+                              // color: KColors.persistentBlack,
+                              color: KColors.red,
+                              text: "Cancel",
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            onPressed: () {
+                              homepageController.isshowDriverId2.value = false;
+                              Get.back();
+                            },
                           ),
-                          onPressed: () {
-                            Get.back();
-                          },
                         ),
-                        TextButton(
-                          child: AppText(
-                            color: KColors.persistentBlack,
-                            text: "OK",
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.bold,
+                        Card(
+                          elevation: 3,
+                          shadowColor: AppColor.greenColor,
+                          // color: AppColor.greenColor,
+                          child: TextButton(
+                            child: AppText(
+                              color: KColors.green,
+                              // color: KColors.persistentBlack,
+                              text: "OK",
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            onPressed: () async {
+                              if (homepageController.batteryID.text.isEmpty ||
+                                  homepageController
+                                      .aboutProblemController.text.isEmpty ||
+                                  homepageController
+                                      .userIdvalue.value.isEmpty) {
+                                customeToast("Please fill all Fields");
+                              } else {
+                                await homepageController
+                                    .batteryChargerProblem("BatteryQR"
+                                        // homepageController.batteryID.text
+                                        );
+                                Get.back();
+                              }
+                            },
                           ),
-                          onPressed: () async {
-                            await homepageController
-                                .batteryChargerProblem("BatteryQR"
-                                    // homepageController.batteryID.text
-                                    );
-                            Get.back();
-                          },
                         ),
                       ],
                     )
@@ -243,13 +282,13 @@ batteryQrProblems(context) {
           builder: (context, setState) {
             return AlertDialog(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
+                    borderRadius: BorderRadius.circular(10)),
                 title: Column(
                   children: [
                     AppText(
                       color: KColors.persistentBlack,
-                      text: "Charger problem",
-                      fontSize: 14.sp,
+                      text: "Charger Problem",
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
                     ),
                     height10,
@@ -266,46 +305,235 @@ batteryQrProblems(context) {
                       ),
                     ),
                     height5,
-                    CustomFormField(
+                    TextFormField(
+                      decoration: InputDecoration(
+                          labelText: "Changer ID",
+                          border: OutlineInputBorder()),
                       controller: homepageController.addChargerID,
-                      hint: "Changer ID",
                     ),
+                    // CustomFormField(
+                    //   controller: homepageController.addChargerID,
+                    //   hint: "Changer ID",
+                    // ),
                     height5,
-                    CustomFormField(
-                        maxLines: true,
-                        controller: homepageController.aboutProblemController,
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: getVerticalSize(10),
-                            horizontal: getHorizontalSize(10)),
-                        hint: "Description"),
+
+                    TextFormField(
+                      maxLines: 5,
+                      decoration: InputDecoration(
+                          labelText: "Description",
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: getVerticalSize(10),
+                              horizontal: getHorizontalSize(10))),
+                      controller: homepageController.aboutProblemController,
+                    ),
+                    // CustomFormField(
+                    //     maxLines: true,
+                    //     controller: homepageController.aboutProblemController,
+                    //     contentPadding: EdgeInsets.symmetric(
+                    //         vertical: getVerticalSize(10),
+                    //         horizontal: getHorizontalSize(10)),
+                    //     hint: "Description"),
                     height5,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        TextButton(
-                          child: AppText(
-                            color: KColors.persistentBlack,
-                            text: "Cancel",
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.bold,
+                        Card(
+                          // color: AppColor.redColor.shade400,
+                          elevation: 3,
+                          shadowColor: AppColor.redColor,
+                          child: TextButton(
+                            child: AppText(
+                              // color: KColors.persistentBlack,
+                              color: KColors.red,
+                              text: "Cancel",
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            onPressed: () {
+                              homepageController.isshow.value = false;
+                              Get.back();
+                            },
                           ),
-                          onPressed: () {
-                            Get.back();
-                          },
                         ),
-                        TextButton(
-                          child: AppText(
-                            color: KColors.persistentBlack,
-                            text: "OK",
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.bold,
+                        // TextButton(
+                        //   child: AppText(
+                        //     color: KColors.persistentBlack,
+                        //     text: "Cancel",
+                        //     fontSize: 14.sp,
+                        //     fontWeight: FontWeight.bold,
+                        //   ),
+                        //   onPressed: () {
+                        //     Get.back();
+                        //   },
+                        // ),
+                        Card(
+                          elevation: 3,
+                          shadowColor: AppColor.greenColor,
+                          // color: AppColor.greenColor,
+                          child: TextButton(
+                            child: AppText(
+                              color: KColors.green,
+                              // color: KColors.persistentBlack,
+                              text: "OK",
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            onPressed: () async {
+                              if (homepageController
+                                      .addChargerID.text.isEmpty ||
+                                  homepageController
+                                      .aboutProblemController.text.isEmpty ||
+                                  homepageController.userId.value.isEmpty) {
+                                customeToast("Please fill all Fields");
+                              } else {
+                                await homepageController
+                                    .batteryChargerProblem("ChargerQR"
+                                        // homepageController.batteryID.text
+                                        );
+                                Get.back();
+                              }
+                            },
                           ),
-                          onPressed: () async {
-                            await homepageController
-                                .batteryChargerProblem("ChargerQR");
-                            Get.back();
-                          },
                         ),
+
+                        // TextButton(
+                        //   child: AppText(
+                        //     color: KColors.persistentBlack,
+                        //     text: "OK",
+                        //     fontSize: 14.sp,
+                        //     fontWeight: FontWeight.bold,
+                        //   ),
+                        //   onPressed: () async {
+                        //     await homepageController
+                        //         .batteryChargerProblem("ChargerQR");
+                        //     Get.back();
+                        //   },
+                        // ),
+                      ],
+                    )
+                  ],
+                ));
+          },
+        );
+      });
+}
+
+allocateAssignBattery(context) {
+  return showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                title: Column(
+                  children: [
+                    AppText(
+                      color: KColors.persistentBlack,
+                      text: "Allocate Assign Battery",
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    height10,
+                    Obx(
+                      () => Column(
+                        children: [
+                          //  chargerQrDropdown("select problem" , homepageController.generateBatteryproblemTypeList ,  homepageController.isshow3.value),
+                          height10,
+                          chargerQrUseridDropdown(
+                              "Users",
+                              homepageController.serviceUserData,
+                              homepageController.isshowDriverId3.value),
+                        ],
+                      ),
+                    ),
+                    height5,
+                    TextFormField(
+                      decoration: InputDecoration(
+                          labelText: "Battery ID",
+                          border: OutlineInputBorder()),
+                      controller: homepageController.assignBatteryID,
+                    ),
+                    // CustomFormField(
+                    //   controller: homepageController.assignBatteryID,
+                    //   hint: "Battery ID",
+                    // ),
+                    // height5,
+                    // CustomFormField(
+                    //     maxLines: true,
+                    //     controller: homepageController.aboutProblemController,
+                    //     contentPadding: EdgeInsets.symmetric(
+                    //         vertical: getVerticalSize(10),
+                    //         horizontal: getHorizontalSize(10)),
+                    //     hint: "Description"),
+                    height5,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Card(
+                          // color: AppColor.redColor.shade400,
+                          elevation: 3,
+                          shadowColor: AppColor.redColor,
+                          child: TextButton(
+                            child: AppText(
+                              // color: KColors.persistentBlack,
+                              color: KColors.red,
+                              text: "Cancel",
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            onPressed: () {
+                              homepageController.isshow.value = false;
+                              Get.back();
+                            },
+                          ),
+                        ),
+
+                        Card(
+                          elevation: 3,
+                          shadowColor: AppColor.greenColor,
+                          // color: AppColor.greenColor,
+                          child: TextButton(
+                            child: AppText(
+                              color: KColors.green,
+                              // color: KColors.persistentBlack,
+                              text: "OK",
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            onPressed: () async {
+                              if (homepageController
+                                      .assignBatteryID.text.isEmpty ||
+                                  // homepageController
+                                  //     .aboutProblemController.text.isEmpty ||
+                                  homepageController.userId.value.isEmpty) {
+                                customeToast("Please fill all Fields");
+                              } else {
+                                // await homepageController
+                                //     .batteryChargerProblem("BatteryQR"
+                                //         // homepageController.batteryID.text
+                                //         );
+                                // Get.back();
+                                await homepageController.allocateBatteries();
+                                Get.back();
+                              }
+                            },
+                          ),
+                        ),
+                        // TextButton(
+                        //   child: AppText(
+                        //     color: KColors.persistentBlack,
+                        //     text: "OK",
+                        //     fontSize: 14.sp,
+                        //     fontWeight: FontWeight.bold,
+                        //   ),
+                        //   onPressed: () async {
+                        //     await homepageController.allocateBatteries();
+                        //     Get.back();
+                        //   },
+                        // ),
                       ],
                     )
                   ],
@@ -328,8 +556,8 @@ chargerQrProblems(context) {
                   children: [
                     AppText(
                       color: KColors.persistentBlack,
-                      text: "Please Add battery charger problem",
-                      fontSize: 14.sp,
+                      text: "Please Add Battery Charger Problem",
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
                     ),
                     height10,
@@ -346,46 +574,97 @@ chargerQrProblems(context) {
                       ),
                     ),
                     height5,
-                    CustomFormField(
+                    TextFormField(
+                      decoration: InputDecoration(
+                          labelText: "Charger ID",
+                          border: OutlineInputBorder()),
                       controller: homepageController.chargerID,
-                      hint: "Charger ID",
                     ),
+                    // CustomFormField(
+                    //   controller: homepageController.chargerID,
+                    //   hint: "Charger ID",
+                    // ),
                     height5,
-                    CustomFormField(
-                        maxLines: true,
-                        controller: homepageController.aboutProblemController,
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: getVerticalSize(10),
-                            horizontal: getHorizontalSize(10)),
-                        hint: "Description"),
+                    TextFormField(
+                      maxLines: 5,
+                      decoration: InputDecoration(
+                          labelText: "Description",
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: getVerticalSize(10),
+                              horizontal: getHorizontalSize(10))),
+                      controller: homepageController.aboutProblemController,
+                    ),
+                    // CustomFormField(
+                    //     maxLines: true,
+                    //     controller: homepageController.aboutProblemController,
+                    //     contentPadding: EdgeInsets.symmetric(
+                    //         vertical: getVerticalSize(10),
+                    //         horizontal: getHorizontalSize(10)),
+                    //     hint: "Description"),
                     height5,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        TextButton(
-                          child: AppText(
-                            color: KColors.persistentBlack,
-                            text: "Cancel",
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.bold,
+                        Card(
+                          // color: AppColor.redColor.shade400,
+                          elevation: 3,
+                          shadowColor: AppColor.redColor,
+                          child: TextButton(
+                            child: AppText(
+                              // color: KColors.persistentBlack,
+                              color: KColors.red,
+                              text: "Cancel",
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            onPressed: () {
+                              homepageController.isshow.value = false;
+                              Get.back();
+                            },
                           ),
-                          onPressed: () {
-                            Get.back();
-                          },
                         ),
-                        TextButton(
-                          child: AppText(
-                            color: KColors.persistentBlack,
-                            text: "OK",
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.bold,
+                        Card(
+                          elevation: 3,
+                          shadowColor: AppColor.greenColor,
+                          // color: AppColor.greenColor,
+                          child: TextButton(
+                            child: AppText(
+                              color: KColors.green,
+                              // color: KColors.persistentBlack,
+                              text: "OK",
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            onPressed: () async {
+                              if (homepageController.chargerID.text.isEmpty ||
+                                  homepageController
+                                      .aboutProblemController.text.isEmpty ||
+                                  homepageController.userId.value.isEmpty) {
+                                customeToast("Please fill all Fields");
+                              } else {
+                                await homepageController
+                                    .batteryChargerProblem("AddCharger"
+                                        // homepageController.batteryID.text
+                                        );
+                                Get.back();
+                              }
+                            },
                           ),
-                          onPressed: () async {
-                            await homepageController
-                                .batteryChargerProblem("AddCharger");
-                            Get.back();
-                          },
                         ),
+                        // TextButton(
+                        //   child: AppText(
+                        //     color: KColors.persistentBlack,
+                        //     text: "OK",
+                        //     fontSize: 14.sp,
+                        //     fontWeight: FontWeight.bold,
+                        //   ),
+                        //   onPressed: () async {
+                        //     await homepageController
+                        //         .batteryChargerProblem("AddCharger");
+                        //     Get.back();
+                        //   },
+                        // ),
                       ],
                     )
                   ],
@@ -492,10 +771,10 @@ addcharegerUserIdcustomDropdown(String title, List list, bool isshow) {
             decoration: BoxDecoration(
                 border: Border.all(color: KColors.lightGrey),
                 borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(0),
-                    bottomRight: Radius.circular(0),
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10))),
+                    bottomLeft: Radius.circular(5),
+                    bottomRight: Radius.circular(5),
+                    topLeft: Radius.circular(5),
+                    topRight: Radius.circular(5))),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -506,7 +785,7 @@ addcharegerUserIdcustomDropdown(String title, List list, bool isshow) {
                         ? title
                         : homepageController.userIdvalue.value,
                     fontSize: 13.sp,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
                 IconButton(
@@ -521,6 +800,7 @@ addcharegerUserIdcustomDropdown(String title, List list, bool isshow) {
               ],
             )),
       ),
+      height2,
       homepageController.isshowDriverId2.value == true
           ? SizedBox(
               width: 400,
@@ -529,9 +809,11 @@ addcharegerUserIdcustomDropdown(String title, List list, bool isshow) {
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.only(
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10)),
-                      color: KColors.grey.withOpacity(0.3),
+                          topLeft: Radius.circular(5),
+                          topRight: Radius.circular(5),
+                          bottomLeft: Radius.circular(5),
+                          bottomRight: Radius.circular(5)),
+                      color: KColors.grey.withOpacity(0.1),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -543,8 +825,7 @@ addcharegerUserIdcustomDropdown(String title, List list, bool isshow) {
                                 child: GestureDetector(
                                     onTap: () {
                                       homepageController.userIdvalue.value =
-                                          homepageController
-                                              .dealerList[e].name!;
+                                          homepageController.dealerList[e].name;
                                       homepageController.isshowDriverId2.value =
                                           false;
                                       homepageController.userId.value =
@@ -553,11 +834,25 @@ addcharegerUserIdcustomDropdown(String title, List list, bool isshow) {
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.all(7.0),
-                                      child: AppText(
-                                        text: homepageController
-                                            .dealerList[e].name!,
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.w600,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 8.0),
+                                            child: AppText(
+                                              text: homepageController
+                                                  .dealerList[e].name
+                                                  .toUpperCase(),
+                                              fontSize: 14.sp,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          Divider(
+                                            thickness: 1,
+                                          )
+                                        ],
                                       ),
                                     ))))
                       ],
@@ -668,10 +963,10 @@ gesnertaedBatteryQrUserIdProblem(String title, List list, bool isshow) {
             decoration: BoxDecoration(
                 border: Border.all(color: KColors.lightGrey),
                 borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(0),
-                    bottomRight: Radius.circular(0),
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10))),
+                    bottomLeft: Radius.circular(5),
+                    bottomRight: Radius.circular(5),
+                    topLeft: Radius.circular(5),
+                    topRight: Radius.circular(5))),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -682,7 +977,7 @@ gesnertaedBatteryQrUserIdProblem(String title, List list, bool isshow) {
                         ? title
                         : homepageController.problemType.value,
                     fontSize: 13.sp,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
                 IconButton(
@@ -710,9 +1005,11 @@ gesnertaedBatteryQrUserIdProblem(String title, List list, bool isshow) {
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.only(
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10)),
-                      color: KColors.grey.withOpacity(0.3),
+                          topLeft: Radius.circular(5),
+                          topRight: Radius.circular(5),
+                          bottomLeft: Radius.circular(5),
+                          bottomRight: Radius.circular(5)),
+                      color: KColors.grey.withOpacity(0.1),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -726,18 +1023,31 @@ gesnertaedBatteryQrUserIdProblem(String title, List list, bool isshow) {
                                       homepageController.userId.value =
                                           homepageController.dealerList[e].id!;
                                       homepageController.problemType.value =
-                                          homepageController
-                                              .dealerList[e].name!;
+                                          homepageController.dealerList[e].name;
                                       homepageController.isshow.value = false;
                                       // isshow = false;
                                     },
                                     child: Padding(
-                                      padding: const EdgeInsets.all(6.0),
-                                      child: AppText(
-                                        text: homepageController
-                                            .dealerList[e].name!,
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.w600,
+                                      padding: const EdgeInsets.all(7.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 8.0),
+                                            child: AppText(
+                                              text: homepageController
+                                                  .dealerList[e].name
+                                                  .toUpperCase(),
+                                              fontSize: 14.sp,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          Divider(
+                                            thickness: 1,
+                                          )
+                                        ],
                                       ),
                                     ))))
                       ],
@@ -849,10 +1159,10 @@ chargerQrUseridDropdown(String title, List list, bool isshow) {
             decoration: BoxDecoration(
                 border: Border.all(color: KColors.lightGrey),
                 borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(0),
-                    bottomRight: Radius.circular(0),
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10))),
+                    bottomLeft: Radius.circular(5),
+                    bottomRight: Radius.circular(5),
+                    topLeft: Radius.circular(5),
+                    topRight: Radius.circular(5))),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -887,9 +1197,11 @@ chargerQrUseridDropdown(String title, List list, bool isshow) {
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.only(
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10)),
-                      color: KColors.grey.withOpacity(0.3),
+                          topLeft: Radius.circular(5),
+                          topRight: Radius.circular(5),
+                          bottomLeft: Radius.circular(5),
+                          bottomRight: Radius.circular(5)),
+                      color: KColors.grey.withOpacity(0.1),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -909,12 +1221,26 @@ chargerQrUseridDropdown(String title, List list, bool isshow) {
                                       // isshow = false;
                                     },
                                     child: Padding(
-                                      padding: const EdgeInsets.all(6.0),
-                                      child: AppText(
-                                        text: homepageController
-                                            .dealerList[e].name!,
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.w600,
+                                      padding: const EdgeInsets.all(7.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 8.0),
+                                            child: AppText(
+                                              text: homepageController
+                                                  .dealerList[e].name
+                                                  .toUpperCase(),
+                                              fontSize: 14.sp,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          Divider(
+                                            thickness: 1,
+                                          )
+                                        ],
                                       ),
                                     ))))
                       ],

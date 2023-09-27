@@ -21,5 +21,9 @@ class ServiceConstant {
 
   static const String ADD_LOCATION = "api/locationdata";
   static const String USER_ATTENDANCE = "api/check_service_user_attendance";
+  static const String CHECK_USER_SERVAY = "api/checkUser_survay";
+  static const String SWAP_BATTERY_HISTORY = "api/swap_battery_history";
+  static const String ALLOCATE_BATTERY = "api/allocate_battery";
 
+  static const String MOBILE_TOKEN = "api/get_service_user_token";
 }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -57,6 +58,25 @@ class ApiRepo {
     }
   }
 
+  Future getMobileToken() async {
+    try {
+      var response = await _api.request
+          .get(
+            "api/get_service_user_token",
+            options: options,
+          )
+          .timeout(const Duration(seconds: 15));
+      var responseBody = jsonDecode(response.data);
+      return responseBody;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      errorSnackbar(getError(e));
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
+
   Future fetchPowerOfBatteries(String bid) async {
     var response =
         await _api.request.post("http://battrack.electrifuel.com/batterydata/",
@@ -79,6 +99,43 @@ class ApiRepo {
           ]
         });
     return response.data;
+  }
+
+  Future sendPushNotification(
+      List pushToken, String msg, String senderName) async {
+    // final body = {
+    //   {
+    //     "to": chatUser,
+    //     "notification": {"title": chatUser, "body": msg}
+    //   }
+    // };
+    try {
+      var response =
+          await _api.request.post("https://fcm.googleapis.com/fcm/send",
+              options: Options(
+                headers: {
+                  HttpHeaders.contentTypeHeader: 'application/json',
+                  HttpHeaders.authorizationHeader:
+                      'key=AAAAsM--0hw:APA91bFoTs0pSyvMZq-1iZraN2d6JxDWAAO-4cYgmPGw_M5tHt2x-ddJEmppR5bWxcY1h6-G4AMlWTowgiuOt0MWap_u_G7UrhhggYEVebLXNv1simgILYOg2qNaVfqOsodpVkI6v5uP',
+                },
+              ),
+              data: {
+            "registration_ids": pushToken,
+            "collapse_key": "type_a",
+            "notification": {"title": senderName, "body": msg}
+          });
+      if (response.statusCode == 200) {
+        print("yes send notification");
+        // print(data);
+      } else {}
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      errorSnackbar(getError(e));
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+    // return response.data;
   }
 
   BatteryDetailpageController batteryDetailpageController = Get.find();
@@ -417,10 +474,72 @@ class ApiRepo {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
   }
+
   Future userAttendence(Map<String, dynamic> data) async {
     try {
       var response = await _api.request
           .post(ServiceConstant.USER_ATTENDANCE, options: options, data: data)
+          .timeout(const Duration(seconds: 15));
+      if (response.statusCode == 200) {
+        var responseBody = jsonDecode(response.data);
+        return responseBody;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      errorSnackbar(getError(e));
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
+
+  Future checkUserSurvay(Map<String, dynamic> data) async {
+    try {
+      var response = await _api.request
+          .post(ServiceConstant.CHECK_USER_SERVAY, options: options, data: data)
+          .timeout(const Duration(seconds: 15));
+      if (response.statusCode == 200) {
+        var responseBody = jsonDecode(response.data);
+        return responseBody;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      errorSnackbar(getError(e));
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
+
+  Future swapBatteryHistory(Map<String, dynamic> data) async {
+    try {
+      var response = await _api.request
+          .post(ServiceConstant.SWAP_BATTERY_HISTORY,
+              options: options, data: data)
+          .timeout(const Duration(seconds: 15));
+      if (response.statusCode == 200) {
+        var responseBody = jsonDecode(response.data);
+        return responseBody;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      errorSnackbar(getError(e));
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
+
+  Future allocateBattery(Map<String, dynamic> data) async {
+    try {
+      var response = await _api.request
+          .post(ServiceConstant.ALLOCATE_BATTERY, options: options, data: data)
           .timeout(const Duration(seconds: 15));
       if (response.statusCode == 200) {
         var responseBody = jsonDecode(response.data);

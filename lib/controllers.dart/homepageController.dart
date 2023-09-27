@@ -27,6 +27,7 @@ import '../model/dealerModel.dart';
 import '../model/driverModel.dart';
 import '../model/serviceReportModel.dart';
 
+import '../model/swapBatteryModel.dart';
 import '../model/userListModel.dart';
 import '../utils/colors.dart';
 import '../utils/customText.dart';
@@ -42,6 +43,8 @@ class HomepageController extends GetxController {
   RxList<UserListModel> userList = <UserListModel>[].obs;
   RxList uniqueList = [].obs;
   RxList<ServiceReportModel> serviceReportList = <ServiceReportModel>[].obs;
+  RxList<SwapBatteryModel> swapBatteryList = <SwapBatteryModel>[].obs;
+
   LocalStorageController localStorageController = Get.find();
   late TextEditingController searchController;
   late TextEditingController nameController;
@@ -105,7 +108,9 @@ class HomepageController extends GetxController {
   RxList<DealerListModel> getdealerList = <DealerListModel>[].obs;
   RxList<DriverModel> getDriverDetailList = <DriverModel>[].obs;
 
-  RxString base64stringforBattery = "".obs;
+  // RxString base64stringforBattery = "".obs;
+  RxList base64stringforBattery = [].obs;
+
   RxString pathNameforBattery = "".obs;
   var selectedImagePathinBattery = "".obs;
 
@@ -128,17 +133,33 @@ class HomepageController extends GetxController {
   late TextEditingController batteryID;
   late TextEditingController addChargerID;
   late TextEditingController chargerID;
+  late TextEditingController assignBatteryID;
 
   late TextEditingController dealerNameController;
   late TextEditingController driverCountController;
   late TextEditingController batteryCountController;
   late TextEditingController chargerCountController;
+  late TextEditingController remarkController;
   // late TextEditingController wiringMeterController;
   // late TextEditingController fileDataController;
   // RxString userValue = "arun".obs;
   final userValue = Rxn<String>();
   RxString dealerID = "".obs;
   RxBool attendenceStatus = false.obs;
+
+  RxString dealerIdOld = "".obs;
+  RxInt statusOfDealer = 0.obs;
+  RxString msgDealer = "".obs;
+
+  RxList imageList = [].obs;
+  RxList<XFile> img = <XFile>[].obs;
+  RxList<File> croppedImgList = <File>[].obs;
+  RxList<XFile> images = <XFile>[].obs;
+  RxString pathName = "".obs;
+  RxString base64strings = "".obs;
+  RxString pushToken = "".obs;
+  RxList<String> mobileToken = <String>[].obs;
+  var distinctTokenList = [].obs;
 
   RxList problemTypeList = [
     "New Battery add",
@@ -279,7 +300,13 @@ class HomepageController extends GetxController {
       // "title": "Charger\nQr",
       "title": "Charger Qr",
       "page": const BatteryAndChargerPage()
-    }
+    },
+    {
+      "image": "assets/images/charger.png",
+      // "title": "Add\nCharger",
+      "title": "Allocate Battery",
+      "page": const BatteryAndChargerPage()
+    },
   ].obs;
 
   Future serviceReport() async {
@@ -426,6 +453,109 @@ class HomepageController extends GetxController {
     hideLoading();
   }
 
+  Future checkSurvay() async {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    var now = new DateTime.now();
+    var formatter = new DateFormat('yyyy-MM-dd');
+    String formattedDate = formatter.format(now);
+    // print("this is the value of date and service user id");
+    // print(formattedDate);
+    // print(localStorageController.userToken.value);
+    // data["serviceUser_id"] = localStorageController.userToken.value;
+    data["date"] = formattedDate;
+    // print(data);
+
+    data['user_type'] = isNewDealer.value == false ? "exists_user" : null;
+    data['user_name'] = dealerNameController.text;
+    data['dealer_id'] = isNewDealer.value == false ? dealerIdOld.value : null;
+    print("this is data of dealer");
+    print(data);
+    try {
+      showloadingIndicators();
+      await ApiRepo().checkUserSurvay(data).then((value) {
+        if (value["status"] == 1) {
+          statusOfDealer.value = value["status"];
+          msgDealer.value = value["message"];
+        } else {
+          statusOfDealer.value = value["status"];
+          msgDealer.value = value["message"];
+        }
+        print("This is value of status ");
+        print(value['status']);
+        // attendenceStatus.value = value['status'];
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+
+    hideLoading();
+  }
+
+  Future swapBatteriesHistory(String divID) async {
+    final Map<String, dynamic> data = <String, dynamic>{};
+
+    data['driver_id'] = divID;
+    print("this is data of dealer");
+    print(data);
+    try {
+      showloadingIndicators();
+      await ApiRepo().swapBatteryHistory(data).then((value) {
+        swapBatteryList.value = (value["data"] as List)
+            .map((e) => SwapBatteryModel.fromJson(e))
+            .toList();
+        print("this is value of swap battery");
+        print(swapBatteryList.value);
+        // if (value["status"] == 1) {
+        //   statusOfDealer.value = value["status"];
+        //   msgDealer.value = value["message"];
+        // } else {
+        //   statusOfDealer.value = value["status"];
+        //   msgDealer.value = value["message"];
+        // }
+        // print("This is value of status ");
+        // print(value['status']);
+        // attendenceStatus.value = value['status'];
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+
+    hideLoading();
+  }
+
+  Future allocateBatteries() async {
+    final Map<String, dynamic> data = <String, dynamic>{};
+
+    data['battery_id'] = userId.value;
+    data['dealer_id'] = assignBatteryID.text;
+    print("this is data of dealer");
+    print(data);
+    try {
+      showloadingIndicators();
+      await ApiRepo().allocateBattery(data).then((value) {
+        // swapBatteryList.value = (value["data"] as List)
+        //     .map((e) => SwapBatteryModel.fromJson(e))
+        //     .toList();
+        // print("this is value of swap battery");
+        // print(swapBatteryList.value);
+        // if (value["status"] == 1) {
+        //   statusOfDealer.value = value["status"];
+        //   msgDealer.value = value["message"];
+        // } else {
+        //   statusOfDealer.value = value["status"];
+        //   msgDealer.value = value["message"];
+        // }
+        // print("This is value of status ");
+        // print(value['status']);
+        // attendenceStatus.value = value['status'];
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+
+    hideLoading();
+  }
+
   Future batteryChargerProblem(String ProblemType) async {
     HomepageController homepageController = Get.find();
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -511,13 +641,26 @@ class HomepageController extends GetxController {
 
   Future getDealerSurveys() async {
     final Map<String, dynamic> data = <String, dynamic>{};
+    // final Map<String, dynamic> d = <String, dynamic>{};
+
+    var now = new DateTime.now();
+    var formatter = new DateFormat('yyyy-MM-dd');
+    String formattedDate = formatter.format(now);
     data["name"] = dealerNameController.text;
     data["driver_count"] = driverCountController.text;
     data["battery_count"] = batteryCountController.text;
     data["charger_count"] = chargerCountController.text;
     data["wiring_meter"] = radioButton.value;
-    data["filedata"] = base64stringforBattery.value;
+    data["dealer_id"] = isNewDealer.value == false ? dealerIdOld.value : null;
+    data["date"] = formattedDate;
+    data["remark"] = remarkController.text;
+    // data["filedata"] = base64stringforBattery.value;
+    data["filedata"] = imageList;
     //  print(data["serviceUser_id"]);
+    print("clicked on submited");
+    print(data);
+    print("this is image data");
+    print(imageList);
     try {
       showloadingIndicators();
       await ApiRepo().getDealerSurvey(data).then((value) {
@@ -621,10 +764,15 @@ class HomepageController extends GetxController {
       print(currLat.value);
       print(currLong.value);
       print("This is day function call");
+      var now = new DateTime.now();
+      var formatter = new DateFormat('hh:mm:ss');
+      String formattedDate = formatter.format(now);
+      print(formattedDate);
       // await getDay();
       locationdata = {
         "lat": double.parse(currLat.value),
-        "lng": double.parse(currLong.value)
+        "lng": double.parse(currLong.value),
+        "time": formattedDate
       };
       // locationdata = {
       //   "lat":currLat.value,
@@ -684,6 +832,43 @@ class HomepageController extends GetxController {
     hideLoading();
   }
 
+  Future allUserToken() async {
+    try {
+      // showloadingIndicators();
+      await ApiRepo().getMobileToken().then((value) {
+        // serviceUserData.value = (value["data"] as List)
+        //     .map((e) => UserDataModel.fromJson(e))
+        //     .toList();
+        // print("alluserDeatails");
+        // print(value);
+        // print(serviceUserData);
+        print("mobile token found in the form of list");
+        if (value["status"] == 1) {
+          print("this is the length of data");
+          for (int i = 0; i < value["data"].length; i++) {
+            // print("the value of data in interate");
+            // print(value["data"][i]);
+            mobileToken.add(value["data"][i]);
+          }
+          print(value["data"].length);
+          print(mobileToken.value);
+          mobileToken.value
+              .removeWhere((element) => element == pushToken.value);
+          print("this is the distinct list");
+          print(mobileToken.value);
+          distinctTokenList.value = mobileToken.value.toSet().toList();
+          print("this is the distinct list");
+
+          print(distinctTokenList.value);
+        }
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+
+    hideLoading();
+  }
+
   navigatetoPage(int index) {
     switch (index) {
       case 0:
@@ -708,6 +893,11 @@ class HomepageController extends GetxController {
       case 3:
         {
           chargerQrProblems(Get.context);
+        }
+        break;
+      case 4:
+        {
+          allocateAssignBattery(Get.context);
         }
         break;
     }
@@ -777,27 +967,69 @@ class HomepageController extends GetxController {
   }
 
   Future getImageforBattery(ImageSource imageSource) async {
-    var pickeImage = await ImagePicker().pickImage(source: imageSource);
-    if (pickeImage != null) {
-      File? img = await getCroppedImage(pickeImage);
-      pathNameforBattery.value = pickeImage.name;
-      selectedImagePathinBattery.value = await img!.path;
+    // var pickeImage = await ImagePicker().pickImage(source: imageSource);
+    // var pickeImage = await ImagePicker().pickMultiImage();
 
-      File imagefile =
-          File(selectedImagePathinBattery.value); //convert Path to File
-      Uint8List imagebytes = await imagefile.readAsBytes(); //convert to bytes
-      // base64stringforBattery.value =
-      //     "data:image/jpeg;base64," + base64.encode(imagebytes);
-      base64stringforBattery.value = base64.encode(imagebytes);
-      print("byteImage");
-      // print(base64string.value); //convert bytes to base64 string
-      // await editPageController.getUpdateProfile(base64string.value);
-      // await convertImageIntoByte();
-
-      // print(selectedImagePath.value);
+    img.clear();
+    imageList.clear();
+    images.value = await ImagePicker().pickMultiImage();
+    pathName.value = images[0].name;
+    if (images.isNotEmpty) {
+      img.addAll(images);
+      for (int i = 0; i < img.length; i++) {
+        File imagefile = File(img[i].path);
+        Uint8List imagebytes = await imagefile.readAsBytes(); //convert to bytes
+        base64strings.value = base64.encode(imagebytes);
+        // imageList.add("data:image/jpeg;base64," + base64strings.value);
+        imageList.add(base64strings.value);
+      }
+      print(imageList.value);
+      print('this is length of image list');
+      print(imageList.length);
     } else {
       customeToast("No Image Selected");
     }
+
+    // final ImagePicker pickeImage = ImagePicker();
+    // List<XFile>? imageFileList = [];
+
+    // final List<XFile>? selectedImages = await pickeImage.pickMultiImage();
+    // if (selectedImages!.isNotEmpty) {
+    //   imageFileList.addAll(selectedImages);
+    // }
+    // print("Image List Length:" + imageFileList.length.toString());
+    // if (imageFileList.isNotEmpty) {
+    //   print("entry");
+    //   for (int i = 0; i <= imageFileList.length; i++) {
+    //     Uint8List imagebytes =
+    //         await imageFileList[i].readAsBytes(); //convert to bytes
+
+    //     base64stringforBattery.add(base64.encode(imagebytes));
+    //   }
+    // }
+    // print("this is the value of image data ");
+    // print(base64stringforBattery.value);
+
+    // if (pickeImage != null) {
+    //   // File? img = await getCroppedImage(pickeImage);
+    //   // pathNameforBattery.value = pickeImage.name;
+    //   // selectedImagePathinBattery.value = await img!.path;
+
+    //   File imagefile =
+    //       File(selectedImagePathinBattery.value); //convert Path to File
+    //   Uint8List imagebytes = await imagefile.readAsBytes(); //convert to bytes
+    //   // base64stringforBattery.value =
+    //   //     "data:image/jpeg;base64," + base64.encode(imagebytes);
+    //   // base64stringforBattery.value = base64.encode(imagebytes);
+    //   print("byteImage");
+    //   // print(base64string.value); //convert bytes to base64 string
+    //   // await editPageController.getUpdateProfile(base64string.value);
+    //   // await convertImageIntoByte();
+
+    //   // print(selectedImagePath.value);
+    // } else {
+    //   customeToast("No Image Selected");
+    // }
   }
 
   Future getImageforAdditional(ImageSource imageSource) async {
@@ -910,28 +1142,32 @@ class HomepageController extends GetxController {
                   getImageforBattery(ImageSource.gallery);
                 },
                 child: Container(
-                  alignment: Alignment.center,
-                  height: Get.height * 0.20,
-                  width: Get.width * 0.93,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: AppColor.greyColor),
-                    borderRadius: BorderRadius.circular(10),
-                    // color: AppColor.redColor,
-                  ),
-                  child: homepageController
-                          .selectedImagePathinBattery.value.isEmpty
-                      ? AppText(
-                          text: "Please Upload an Image of Battery",
-                          fontSize: 15.sp,
-                          fontWeight: FontWeight.w600,
-                        )
-                      : Image.file(
-                          File(homepageController
-                              .selectedImagePathinBattery.value),
-                          fit: BoxFit.cover,
-                          width: Get.width,
-                        ),
-                ),
+                    alignment: Alignment.center,
+                    height: Get.height * 0.20,
+                    width: Get.width * 0.93,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: AppColor.greyColor),
+                      borderRadius: BorderRadius.circular(10),
+                      // color: AppColor.redColor,
+                    ),
+                    // child: selectedImagePathinBattery.value.isEmpty
+                    child: imageList.isEmpty
+                        ? AppText(
+                            text: "Please Upload an Image of Battery",
+                            fontSize: 15.sp,
+                            fontWeight: FontWeight.w600,
+                          )
+                        // : Image.file(
+                        //     // File(selectedImagePathinBattery.value),
+                        //     File(pathName.value),
+                        //     fit: BoxFit.cover,
+                        //     width: Get.width,
+                        //   ),
+                        : AppText(
+                            text: "Image Uploaded",
+                            fontSize: 15.sp,
+                            fontWeight: FontWeight.w600,
+                          )),
               ),
               SizedBox(
                 width: Get.width * 0.60,
@@ -1107,13 +1343,16 @@ class HomepageController extends GetxController {
         "msg": sliderList.isEmpty ? msg : "",
         "createdOn": DateTime.now(),
         "image": sliderList.isEmpty ? "" : sliderList[0],
-      });
+        "pushToken": pushToken.value
+      }).then((value) => ApiRepo().sendPushNotification(
+          distinctTokenList.value, msg, localStorageController.userName.value));
     } else {
       FirebaseFirestore.instance.collection("ChatRoom").doc().set({
         "sender": localStorageController.userName.value,
         "msg": sliderList.isEmpty ? "" : msg,
         "createdOn": DateTime.now(),
         "image": sliderList.isEmpty ? "" : sliderList[0],
+        "pushToken": pushToken.value
       });
     }
   }
@@ -1134,7 +1373,7 @@ class HomepageController extends GetxController {
       print(selectedImagePath.value);
 
       convertImageIntoByte().then((value) => sliderList.add(value));
-      Get.to(const ImagePage());
+      Get.off(const ImagePage());
     } else {
       Get.snackbar("No Image Selected", "",
           snackPosition: SnackPosition.BOTTOM);
@@ -1242,6 +1481,8 @@ class HomepageController extends GetxController {
     phoneConnectionController = TextEditingController();
     aadharConnectionController = TextEditingController();
     securityConnectionController = TextEditingController();
+    remarkController = TextEditingController();
+    assignBatteryID = TextEditingController();
 
     await localStorageController.getToken();
     await localStorageController.getUserEmail();
@@ -1264,6 +1505,7 @@ class HomepageController extends GetxController {
     if (attendenceStatus.value == false) {
       statusOnline("1");
     }
+    await allUserToken();
     // statusOnline("1");
     await serviceReport();
     getUserList();
@@ -1293,6 +1535,8 @@ class HomepageController extends GetxController {
     phoneConnectionController.dispose();
     aadharConnectionController.dispose();
     securityConnectionController.dispose();
+    remarkController.dispose();
+    assignBatteryID.dispose();
     super.dispose();
   }
 }
